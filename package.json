@@ -1,0 +1,55 @@
+{
+  "name": "hdt-final-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "postcss public/css/main.css -o public/css/style.css",
+    "start": "npm run build:css && nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thang1610200/HDT-Final-Project.git"
+  },
+  "author": "Thang-Giang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thang1610200/HDT-Final-Project/issues"
+  },
+  "homepage": "https://github.com/thang1610200/HDT-Final-Project#readme",
+  "dependencies": {
+    "autoprefixer": "^10.4.14",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "date-fns": "^2.29.3",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "module-alias": "^2.2.2",
+    "mongoose": "^7.0.5",
+    "postcss": "^8.4.23",
+    "postcss-cli": "^10.1.0",
+    "randomstring": "^1.2.3",
+    "tailwindcss": "^3.3.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.3",
+    "nodemon": "^2.0.22"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@v1": "./src/api/v1",
+    "@logs": "./src/api/v1/logs",
+    "@utils": "./src/api/v1/utils",
+    "@controllers": "./src/api/v1/controllers",
+    "@config": "./src/api/v1/config",
+    "@common": "./src/api/v1/common"
+  },
+  "_moduleDirectories": [
+    "node_modules_custom"
+  ]
+}
