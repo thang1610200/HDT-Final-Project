@@ -1,0 +1,20 @@
+04-05-2023	00:00:15==============/api/v1/admin/category====GET====TypeError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\category.ejs:242
+    240|                                     <div class="text-base font-semibold text-gray-900"><%= data[i].Category_name%></div>
+    241|                                 </td>
+ >> 242|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><%= data[i].productdetail.length%></td>
+    243|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><% if(data[i].isDeleted === true){%> OFF <%} else {%> ON <%}%> </td>
+    244|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><%= `${format(data[i].Create_at, 'dd-MM-yyyy\tHH:mm:ss')}`%></td>
+    245|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><%= `${format(data[i].Update_at, 'dd-MM-yyyy\tHH:mm:ss')}`%></td>
+
+Cannot read properties of undefined (reading 'length')
+04-05-2023	00:00:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+04-05-2023	07:01:15==============/api/v1/admin/category====GET====TypeError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\category.ejs:242
+    240|                                     <div class="text-base font-semibold text-gray-900"><%= data[i].Category_name%></div>
+    241|                                 </td>
+ >> 242|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><%= data[i].productdetail.length%></td>
+    243|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><% if(data[i].isDeleted === true){%> OFF <%} else {%> ON <%}%> </td>
+    244|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><%= `${format(data[i].Create_at, 'dd-MM-yyyy\tHH:mm:ss')}`%></td>
+    245|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><%= `${format(data[i].Update_at, 'dd-MM-yyyy\tHH:mm:ss')}`%></td>
+
+Cannot read properties of undefined (reading 'length')
+04-05-2023	07:01:15==============/favicon.ico====GET====NotFoundError: This route does not exist

@@ -1,11 +1,13 @@
 const express = require("express");
-require("module-alias/register")
+require("module-alias/register");
 const router = express.Router();
 
-router.use("/api/v1/guest",require("@controllers/guest"));
+router.use("/guest",require("@controllers/guest"));
+router.use("/user",require("@controllers/user"));
+router.use("/admin",require("@controllers/admin"));
+//router.use("/test",require("@controllers/test"));
 
-router.get("/api/v1",(req,res) => {
+router.get("/",(req,res) => {
     res.render("homepage");
 })
-
 module.exports = router;

@@ -112,7 +112,7 @@
                     <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
                     <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
                 </div>
-                <div id="author" class="text-gray-200 hover:text-white transition"><a href="/guest/login">Login</a></div>
+                <div id="author" class="text-gray-200 hover:text-white transition"><a href="/api/v1/guest/login">Login</a></div>
             </div>
         </div>
     </nav>
@@ -803,10 +803,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
    <script>
-        $(document).ready(function(){
+        $(document).ready(async function(){
             if($.cookie("token")){
                 $("#author").empty();
-                $("#author").append("<a href='/guest/logout'>Logout</a>")
+                $("#author").append("<a href='/api/v1/guest/logout'>Logout</a>")
             }
         })
     </script>

@@ -1,0 +1,2 @@
+28-04-2023	29:18:09==============/api/v1/guest/login====POST====TypeError: User.ComparePass is not a function
+28-04-2023	09:19:09==============/api/v1/guest/login====POST====TypeError: User.ComparePass is not a function

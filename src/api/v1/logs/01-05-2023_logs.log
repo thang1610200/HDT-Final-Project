@@ -1,0 +1,12 @@
+01-05-2023	57:57:13==============/====GET====NotFoundError: This route does not exist
+01-05-2023	57:57:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+01-05-2023	10:01:14==============/api/v1/guest/login/d====GET====NotFoundError: This route does not exist
+01-05-2023	10:01:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+01-05-2023	13:37:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+01-05-2023	24:52:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+01-05-2023	19:55:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+01-05-2023	46:59:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+01-05-2023	50:01:16==============/favicon.ico====GET====NotFoundError: This route does not exist
+01-05-2023	16:03:16==============/favicon.ico====GET====NotFoundError: This route does not exist
+01-05-2023	41:07:16==============/favicon.ico====GET====NotFoundError: This route does not exist
+01-05-2023	48:10:16==============/favicon.ico====GET====NotFoundError: This route does not exist

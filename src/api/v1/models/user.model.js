@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const {v4: uuidv4} = require("uuid");
 const random = require("randomstring");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("module-alias/register");
+const fs = require("fs");
+const {client} = require("@common/Redis");
 
 const user = new mongoose.Schema({
     id: {type: String, default: uuidv4()},
@@ -29,5 +33,26 @@ user.pre('save',function() {
     this.createAt = new Date();
     this.updateAt = new Date();
 })
+
+user.methods.ComparePass = function(plaintext){
+    return bcrypt.compareSync(plaintext, this.password);
+}
+
+user.methods.GenerateAccessToken = function(){
+    return new Promise( (resolve, reject) => {
+        const option = {
+            expiresIn : '24h',
+            algorithm: 'RS256'
+        }
+        const private_key = fs.readFileSync('./src/api/v1/keys/privatekey.pem');
+        jwt.sign({id: this.id, role: this.role},private_key ,option, (err,token) => {
+            if(err) reject(err);
+            client.set(this.id,token,'EX',24 * 60 * 60, (err, reply) => {
+                if(err) reject(err);
+                resolve(token);
+            })
+        })
+    });
+}
 
 module.exports = mongoose.model("User",user);

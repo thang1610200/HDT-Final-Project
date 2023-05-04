@@ -3,15 +3,16 @@ const config = require("@config/database.config");
 const logEvent = require("@utils/logEvent");
 
 const url = config.DATABASE_URL;
-const connectDB = async () => {
-    try{
-        mongoose.set('strictQuery', false);
-        mongoose.connect(url);
+const connectDB = () => {
+    mongoose.connection.on("error", function(err){
+        logEvent(`${"database"}====${"MongoDB"}====${err}`);
+    })
+    .on("disconnected", connectDB)
+    .once("open", function(){
         console.log("MongoDB is connect");
-    }
-    catch(err){
-        logEvent(`${database}====${mongodb}====${err}`);
-    }
+    })
+    mongoose.set('strictQuery', false);
+    return mongoose.connect(url);
 }
 
 module.exports = {

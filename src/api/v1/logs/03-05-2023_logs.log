@@ -1,0 +1,7 @@
+03-05-2023	03:56:08==============/images/logo.svg====GET====NotFoundError: This route does not exist
+03-05-2023	46:57:08==============/images/logo.svg====GET====NotFoundError: This route does not exist
+03-05-2023	19:31:20==============/api/v1/edit_infor====POST====NotFoundError: This route does not exist
+03-05-2023	06:33:20==============/api/v1/edit_infor====POST====NotFoundError: This route does not exist
+03-05-2023	28:35:20==============/api/v1/edit_infor====POST====NotFoundError: This route does not exist
+03-05-2023	41:35:20==============/api/v1/edit_infor====POST====NotFoundError: This route does not exist
+03-05-2023	04:36:20==============/api/v1/edit_infor====POST====NotFoundError: This route does not exist

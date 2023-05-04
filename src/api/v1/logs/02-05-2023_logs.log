@@ -1,0 +1,27 @@
+02-05-2023	52:51:09==============/api/v1====GET====Error: ENOENT: no such file or directory, open '@key/publickey.crt'
+02-05-2023	52:51:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+02-05-2023	31:55:09==============/api/v1====GET====Error: ENOENT: no such file or directory, open '@key/publickey.crt'
+02-05-2023	31:55:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+02-05-2023	05:56:09==============/api/v1====GET====Error: ENOENT: no such file or directory, open '@key/publickey.crt'
+02-05-2023	05:56:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+02-05-2023	32:56:09==============/api/v1====GET====Error: ENOENT: no such file or directory, open '@key/publickey.crt'
+02-05-2023	32:56:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+02-05-2023	07:00:10==============/api/v1====GET====Error: ENOENT: no such file or directory, open '@key/publickey.crt'
+02-05-2023	07:00:10==============/favicon.ico====GET====NotFoundError: This route does not exist
+02-05-2023	27:01:10==============/api/v1====GET====Error: ENOENT: no such file or directory, open '@key/publickey.crt'
+02-05-2023	27:01:10==============/favicon.ico====GET====NotFoundError: This route does not exist
+02-05-2023	24:47:13==============/api/v1/user/shop====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\shop.ejs:56
+    54|                     <div id="count_cart"
+    55|                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+ >> 56|                         <% if(sum_cart){%><%= sum_cart.products.length%><%} else{%><%= 0%><%}%></div>
+    57|                 </a>
+    58|                 <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+    59|                     <div class="text-2xl">
+
+sum_cart is not defined
+02-05-2023	24:47:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+02-05-2023	10:27:20==============/api/v1/test/%7B%7B====GET====NotFoundError: This route does not exist
+02-05-2023	10:27:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+02-05-2023	27:33:21==============/images/logo.svg====GET====NotFoundError: This route does not exist
+02-05-2023	26:37:21==============/images/logo.svg====GET====NotFoundError: This route does not exist
+02-05-2023	26:38:21==============/images/logo.svg====GET====NotFoundError: This route does not exist
