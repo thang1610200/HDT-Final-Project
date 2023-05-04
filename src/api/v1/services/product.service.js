@@ -63,6 +63,15 @@ module.exports = {
     {
       $match : {id}
     }]);
+  },
+  findOnebyName: async (name) => {
+    return await product.findOne({Product_name: name});
+},
+  updateProduct: async (id, Product_name, Category_id, Description, Price, Quantity) => {
+    return await product.updateOne({id}, {Product_name, Category_id, Description, Price, Quantity, Update_at: new Date()});
+  },
+  deleteProduct: async (id) => {
+    return await product.updateOne({id},{isDeleted: true});
   }
 
 }

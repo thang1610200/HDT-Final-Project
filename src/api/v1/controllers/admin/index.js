@@ -23,6 +23,24 @@ router.get("/product", async (req,res) => {
         const product = await productService.findAllandCategorybyId(req.body.id);
         return res.json({"data": product});
 })
+    .post("/check_product", async (req,res) => {
+        const product = await productService.findOnebyName(req.body.content);
+        if(product){
+            return res.json({"status":"No"});
+        }
+        else{
+            return res.json({"status": "OK"});
+        }
+})
+    .post("/edit_product", async (req,res) => {
+        const {product_id_edit, product_name_edit, category_edit, quantity_edit, price_edit, product_details_edit} = req.body;
+        await productService.updateProduct(product_id_edit, product_name_edit, category_edit, product_details_edit, price_edit, quantity_edit);
+        res.redirect(req.baseUrl + '/product');
+})
+    .post("/delete_product", async (req,res) => {
+        await productService.deleteProduct(req.body.product_id_delete);
+        res.redirect(req.baseUrl + '/product');
+})
 //========================/Product
 
 //===========================Category
