@@ -7,5 +7,8 @@ module.exports = {
     },
     getOnebyEmail: async (email) => {      // lọc 1 dòng theo email
         return await User.findOne({email});
+    },
+    createUserNoPass: async (fullname, email) => { // tạo user mới khi đăng nhập bằng FB or GG
+        return await User.create({fullname, email});
     }
 }

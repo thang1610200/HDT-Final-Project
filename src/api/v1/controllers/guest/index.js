@@ -1,12 +1,111 @@
 const express = require("express");
+const fs = require('fs');
+const jwt = require("jsonwebtoken");
+const passport = require('passport');
+const createError = require('http-errors');
+const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 require("module-alias/register");
 const { validationResult } = require('express-validator');
 const RegisterValidation = require("@validation/register.validation");
 const LoginValidation = require("@validation/login.validation");
 const UserService = require("@service/user.service");
+const passportConfig = require("@config/passport.config");
+const {client} = require("@common/Redis");
 require("dotenv").config();
 
 const router = express.Router();
+//==============Cấu hình Passport
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+  
+passport.deserializeUser(function(user, done) {
+      done(null, user);
+});
+
+//=========
+
+//==========================Login FB
+passport.use(new FacebookStrategy({
+    clientID: passportConfig.FB_ID,
+    clientSecret: passportConfig.FB_SECRET,
+    callbackURL: `${process.env.URL}/api/v1/guest/facebook/callback`,
+    profileFields: ['id', 'displayName','emails']
+  },
+  async function(accessToken, refreshToken, profile, cb) {        // B2: trả dữ liệu về
+        try{
+            const user = await UserService.getOnebyEmail(profile.emails[0].value);
+
+            if(!user){
+                user = await UserService.createUserNoPass(profile.displayName, profile.emails[0].value);
+            }
+            return cb(null,user);
+        }
+        catch(err){
+            return cb(err);
+        }
+  }                                                          
+ ))
+ 
+ router.get('/facebook',  //B1: vô đường dẫn
+   passport.authenticate('facebook')); 
+ 
+ router.get('/facebook/callback',                         // B5: trả về kết quả
+   passport.authenticate('facebook', { failureRedirect: '/api/v1/guest/login' }),
+   async function(req, res) {
+       const User = await UserService.getOnebyEmail(req.user.email);
+       res.cookie("token",await User.GenerateAccessToken(),{
+        httpOnly: false,  // khi sử dụng https để true
+        secure: false, // khi deploy để true
+        path: "/api/v1",
+        sameSite: "strict",
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+        });
+       res.redirect('/api/v1/user/shop');
+   });
+//==========================Login FB ====================================//
+
+//==========================Login GG
+passport.use(new GoogleStrategy({
+    clientID: passportConfig.GOOGLE_ID,
+    clientSecret: passportConfig.GOOGLE_SECRET,
+    callbackURL: `${process.env.URL}/api/v1/guest/google/callback`
+  },
+  async function(accessToken, refreshToken, profile, cb) {
+    try{
+        const user = await UserService.getOnebyEmail(profile.emails[0].value);
+
+        if(!user){
+            user = await UserService.createUserNoPass(profile.displayName, profile.emails[0].value);
+        }
+        return cb(null,user);
+    }
+    catch(err){
+        return cb(err);
+    }
+  }
+ ));
+ 
+ router.get('/google',
+   passport.authenticate('google',{ scope: ['profile','email'] }));
+ 
+ router.get('/google/callback', 
+   passport.authenticate('google', { failureRedirect: '/api/v1/guest/login' }),
+   async function(req, res) {
+     // Successful authentication, redirect home.
+     const User = await UserService.getOnebyEmail(req.user.email);
+     res.cookie("token",await User.GenerateAccessToken(),{
+      httpOnly: false,  // khi sử dụng https để true
+      secure: false, // khi deploy để true
+      path: "/api/v1",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000 // 1 day
+      });
+     return res.redirect('/api/v1/user/shop');
+   });
+
+//==========================Login FB ====================================//
 
 //==========================Register
 router.get("/register", (req,res) => {
@@ -46,7 +145,29 @@ router.get("/login", (req,res) => {
            res.json({accessToken: req.token});
         }
 });
-
 //===========================Login============================//
+
+//===========================Logout==========================//
+router.get('/logout',(req,res,next) => {
+    const publickey = fs.readFileSync("./src/api/v1/keys/publickey.crt");
+    const token = req.cookies.token;
+    if(!token){
+        return res.redirect("/api/v1/guest/login");
+    }
+    jwt.verify(token,publickey,{ algorithms: ['RS256'] },(err,data) => {
+        if(err){
+            return res.redirect("/api/v1");
+        }
+        client.del(data.id, (err,reply) => {
+            if(err){
+                return next(new createError.InternalServerError());
+            }
+            if(reply === 1){
+                res.clearCookie("token",{ path: '/api/v1' });
+                return res.redirect("/api/v1/guest/login");
+            }
+        })
+    });
+})
 
 module.exports = router;

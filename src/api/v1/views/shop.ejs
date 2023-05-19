@@ -459,7 +459,7 @@
 
             if($.cookie("token")){
                 $("#author").empty();
-                $("#author").append("<a href='/guest/logout'>Logout</a>")
+                $("#author").append("<a href='/api/v1/guest/logout'>Logout</a>")
             }
 
             $(document).on('click',".add_cart",function(){

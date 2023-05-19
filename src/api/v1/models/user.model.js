@@ -26,9 +26,11 @@ const user = new mongoose.Schema({
 })
 
 user.pre('save',function() {
-    const salts = bcrypt.genSaltSync(10);
-    this.id = uuidv4()
-    this.password = bcrypt.hashSync(this.password,salts);
+    if(typeof this.password !== 'undefined'){ 
+        const salts = bcrypt.genSaltSync(10);
+        this.password = bcrypt.hashSync(this.password,salts);
+    }
+    this.id = uuidv4();
     this.email_code = random.generate(25);
     this.phone_code = random.generate(25);
     this.createAt = new Date();
