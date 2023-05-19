@@ -1,0 +1,52 @@
+17-05-2023	20:22:09==============/====GET====NotFoundError: This route does not exist
+17-05-2023	20:22:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+17-05-2023	06:24:09==============/api/v1/user/shop====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\shop.ejs:56
+    54|                     <div id="count_cart"
+    55|                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+ >> 56|                         <% if(sum_cart){%><%= sum_cart.products.length%><%} else{%><%= 0%><%}%></div>
+    57|                 </a>
+    58|                 <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+    59|                     <div class="text-2xl">
+
+sum_cart is not defined
+17-05-2023	06:24:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+17-05-2023	29:25:09==============/api/v1/user/shop====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\shop.ejs:56
+    54|                     <div id="count_cart"
+    55|                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+ >> 56|                         <!-- <% if(sum_cart){%><%= sum_cart.products.length%><%} else{%><%= 0%><%}%></div> -->
+    57|                 </a>
+    58|                 <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+    59|                     <div class="text-2xl">
+
+sum_cart is not defined
+17-05-2023	29:25:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+17-05-2023	55:25:09==============/api/v1/user/shop====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\shop.ejs:56
+    54|                     <div id="count_cart"
+    55|                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+ >> 56|                         <!-- <% if(sum_cart){%><%= sum_cart.products.length%><%} else{%><%= 0%><%}%></div> -->
+    57|                 </a>
+    58|                 <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+    59|                     <div class="text-2xl">
+
+sum_cart is not defined
+17-05-2023	55:25:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+17-05-2023	57:25:09==============/api/v1/user/shop====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\shop.ejs:56
+    54|                     <div id="count_cart"
+    55|                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+ >> 56|                         <!-- <% if(sum_cart){%><%= sum_cart.products.length%><%} else{%><%= 0%><%}%></div> -->
+    57|                 </a>
+    58|                 <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+    59|                     <div class="text-2xl">
+
+sum_cart is not defined
+17-05-2023	57:25:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+17-05-2023	02:26:09==============/api/v1/user/shop====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\shop.ejs:56
+    54|                     <div id="count_cart"
+    55|                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+ >> 56|                         <!-- <% if(sum_cart){%><%= sum_cart.products.length%><%} else{%><%= 0%><%}%></div> -->
+    57|                 </a>
+    58|                 <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+    59|                     <div class="text-2xl">
+
+sum_cart is not defined
+17-05-2023	02:26:09==============/favicon.ico====GET====NotFoundError: This route does not exist

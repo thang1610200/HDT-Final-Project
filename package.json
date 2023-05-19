@@ -37,6 +37,8 @@
     "module-alias": "^2.2.2",
     "mongoose": "^7.0.5",
     "multer": "^1.4.5-lts.1",
+    "passport": "^0.6.0",
+    "passport-facebook": "^3.0.0",
     "postcss": "^8.4.23",
     "postcss-cli": "^10.1.0",
     "randomstring": "^1.2.3",
@@ -60,7 +62,8 @@
     "@service": "./src/api/v1/services",
     "@validation": "./src/api/v1/validations",
     "@middleware": "./src/api/v1/middleware",
-    "@key": "./src/api/v1/keys"
+    "@key": "./src/api/v1/keys",
+    "@util": "./src/api/v1/utils"
   },
   "_moduleDirectories": [
     "node_modules_custom"

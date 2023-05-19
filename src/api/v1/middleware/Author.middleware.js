@@ -28,4 +28,24 @@ function verifyToken(req,res,next){
     });
 }
 
-module.exports = verifyToken;
+function checkURLuser(req,res,next){
+    const role = req.user.role;
+    if(role === "Admin" || role === "User"){
+        return next();
+    }
+    return next(new createError.Forbidden());
+}
+
+function checkURLadmin(req,res,next){
+    const role = req.user.role;
+    if(role === "Admin"){
+        return next();
+    }
+    return next(new createError.Forbidden());
+}
+
+module.exports = {
+    verifyToken: verifyToken,
+    checkURLuser: checkURLuser,
+    checkURLadmin: checkURLadmin
+};

@@ -21,19 +21,23 @@
     <!-- header -->
     <header class="py-4 shadow-sm bg-white">
         <div class="container flex items-center justify-between">
-            <a href="/">
+            <a href="/api/v1">
                 <img src="/static/images/logo.svg" alt="Logo" class="w-32">
             </a>
 
-            <div class="w-full max-w-xl relative flex">
+            <div class="w-full max-w-xl">
+                <div class="relative flex">
                 <span class="absolute left-4 top-3 text-lg text-gray-400">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
                 <input type="text" name="search" id="search"
-                    class="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
+                    class="search w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
                     placeholder="search">
                 <button
                     class="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
+                </div>
+                <div id="result_content"> 
+                </div>  
             </div>
 
             <div class="flex items-center space-x-4">
@@ -53,7 +57,7 @@
                     <div class="text-xs leading-3">Cart</div>
                     <div id="count_cart"
                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                        <% if(sum_cart){%><%= sum_cart.products.length%><%} else{%><%= 0%><%}%></div>
+                        <% if(sum_cart.length > 0){%><%= sum_cart[0].cartdetail.length%><%} else{%>0<%}%></div>
                 </a>
                 <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
                     <div class="text-2xl">
@@ -112,7 +116,7 @@
                     <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
                     <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
                 </div>
-                <div id="author" class="text-gray-200 hover:text-white transition"><a href="/guest/login">Login</a><a href="/guest/register">/Register</a></div>
+                <div id="author" class="text-gray-200 hover:text-white transition"><a href="/api/v1/guest/login">Login</a><a href="/api/v1/guest/register">/Register</a></div>
             </div>
         </div>
     </nav>
@@ -138,30 +142,14 @@
                 <div>
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Categories</h3>
                     <div class="space-y-2">
+                        <% for(let x of cate){ %>
                         <div class="flex items-center">
-                            <input type="checkbox" name="cat-1" id="cat-1"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                            <label for="cat-1" class="text-gray-600 ml-3 cusror-pointer">Bedroom</label>
-                            <div class="ml-auto text-gray-600 text-sm">(15)</div>
+                            <input type="checkbox" id="<%= x.id%>"
+                                class="filter_cate text-primary focus:ring-0 rounded-sm cursor-pointer">
+                            <label for="cat-1" class="text-gray-600 ml-3 cusror-pointer"><%= x.Category_name%></label>
+                            <div class="ml-auto text-gray-600 text-sm">(<%= x.productdetail.length%>)</div>
                         </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" name="cat-2" id="cat-2"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                            <label for="cat-2" class="text-gray-600 ml-3 cusror-pointer">Sofa</label>
-                            <div class="ml-auto text-gray-600 text-sm">(9)</div>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" name="cat-3" id="cat-3"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                            <label for="cat-3" class="text-gray-600 ml-3 cusror-pointer">Office</label>
-                            <div class="ml-auto text-gray-600 text-sm">(21)</div>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" name="cat-4" id="cat-4"
-                                class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                            <label for="cat-4" class="text-gray-600 ml-3 cusror-pointer">Outdoor</label>
-                            <div class="ml-auto text-gray-600 text-sm">(10)</div>
-                        </div>
+                        <%}%>
                     </div>
                 </div>
 
@@ -279,7 +267,7 @@
             <div class="flex items-center mb-4">
                 <select name="sort" id="sort"
                     class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
-                    <option value="">Default sorting</option>
+                    <option value="default">Default sorting</option>
                     <option value="price-low-to-high">Price low to high</option>
                     <option value="price-high-to-low">Price high to low</option>
                     <option value="latest">Latest product</option>
@@ -297,11 +285,15 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-6">
+            <div id="content_product" class="grid grid-cols-3 gap-6">
                 <% data.forEach(function(product){ %>
                 <div class="bg-white shadow rounded overflow-hidden group">
                     <div class="relative">
-                        <img src="https://drive.google.com/uc?export=view&id=<%= product.img%>" alt="product 1" class="w-full">
+                        <% for(let i =0; i < imagem.length; i++){ %>
+                            <% if(imagem[i].Product_Id == product.id){ %>
+                        <img src="https://drive.google.com/uc?export=view&id=<%= imagem[i].Image%>" alt="product 1" class="w-full">
+                                <%}%>
+                        <%}%>
                         <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center 
                         justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
                             <a href="#"
@@ -319,10 +311,10 @@
                     <div class="pt-4 pb-3 px-4">
                         <a href="#">
                             <h4 id="product_name" class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
-                                <%= product.name%></h4>
+                                <%= product.Product_name%></h4>
                         </a>
                         <div class="flex items-baseline mb-1 space-x-2">
-                            <p class="text-xl text-primary font-semibold">$<%= product.price%>.00</p>
+                            <p class="text-xl text-primary font-semibold">$<%= product.Price%></p>
                             <p class="text-sm text-gray-400 line-through">$55.90</p>
                         </div>
                         <div class="flex items-center">
@@ -336,42 +328,38 @@
                             <div class="text-xs text-gray-500 ml-3">(150)</div>
                         </div>
                     </div>
-                    <button type="button" product_name="<%= product.name%>"
+                    <button type="button" product_id="<%= product.id%>"
                         class="add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">Add
                         to cart</button>
                 </div>
                 <%})%>
             </div>
                     <!--Paging-->
+        <input type="hidden" value="<%= count%>" id="count_page">
         <div class="flex items-center justify-center py-10 lg:px-0 sm:px-6 px-4">
             <div class="lg:w-3/5 w-full  flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
                 <div class="flex items-center pt-3 text-gray-600 dark:text-gray-200  hover:text-indigo-700 cursor-pointer">
-                    <% if(page > 1){%>
                     <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1.1665 4H12.8332" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M1.1665 4L4.49984 7.33333" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M1.1665 4.00002L4.49984 0.666687" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <a href="/customer/shop?page=<%= Number(page)-1%>" class="text-sm ml-3 font-medium leading-none">Previous</a> 
-                        <%}%>                   
+                        <button type="button" id="previous_page" class="text-sm ml-3 font-medium leading-none">Previous</button>                  
                 </div>
-                <div class="sm:flex hidden">
-                    <!-- <button class="text-sm font-medium leading-none cursor-pointer text-indigo-700 dark:text-indigo-400 border-t border-indigo-400 pt-3 mr-4 px-2">1</button> -->
-                    <% for(let i = 1; i <= Math.floor(count / 6) + 1; i++){%>
-                    <a href="/customer/shop?page=<%= i%>"  <% if(page == i){%> class="text-sm font-medium leading-none cursor-pointer text-indigo-700 dark:text-indigo-400 border-t border-indigo-400 pt-3 mr-4 px-2" <%} else{ %> 
-                        class="text-sm font-medium leading-none cursor-pointer text-gray-600 dark:text-gray-200  hover:text-indigo-700 dark:hover:text-indigo-400 border-t border-transparent hover:border-indigo-400 pt-3 mr-4 px-2" <%}%>>
-                         <%= i%></a>
+                <div id="select_page" class="sm:flex hidden">
+                    <% for(let i = 1; i < (count / 6) + 1; i++){%>
+                    <button type="button" id="<%= i%>" <% if(i == 1){%> class="text-sm font-medium leading-none cursor-pointer text-indigo-700 dark:text-indigo-400 border-t border-indigo-400 pt-3 mr-4 px-2" <%} else{ %>
+                        class="number_page text-sm font-medium leading-none cursor-pointer text-gray-600 dark:text-gray-200 hover:text-indigo-700 dark:hover:text-indigo-400 border-t border-transparent hover:border-indigo-400 pt-3 mr-4 px-2"<%}%>>
+                         <%= i%></button>
                     <%}%>
                 </div>
                 <div class="flex items-center pt-3 text-gray-600 dark:text-gray-200  hover:text-indigo-700 cursor-pointer">
-                    <% if(page < Math.floor(count / 6) + 1){%>
-                    <a href="/customer/shop?page=<%= Number(page)+1%>" class="text-sm font-medium leading-none mr-3">Next</a>
+                    <button type="button" id="next_page" class="text-sm font-medium leading-none mr-3">Next</button>
                     <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1.1665 4H12.8332" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M9.5 7.33333L12.8333 4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M9.5 0.666687L12.8333 4.00002" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>   
-                        <%}%> 
                 </div>
             </div>
         </div>
@@ -467,24 +455,389 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
    <script>
         $(document).ready(function(){
+            let count_page = $("#count_page").val();
+
             if($.cookie("token")){
                 $("#author").empty();
                 $("#author").append("<a href='/guest/logout'>Logout</a>")
             }
 
-            $(".add_cart").click(function(){
+            $(document).on('click',".add_cart",function(){
                 $.ajax({
-                    url: "/customer/shop",
+                    url: "/api/v1/user/shop",
                     type: "post",
-                    data: {name: $(this).attr("product_name")},
+                    data: {id: $(this).attr("product_id")},
                     dataType: 'json',
                     success: function(data){
                         $("#count_cart").empty();
-                        $("#count_cart").append(data.cart.products.length);
+                        $("#count_cart").append(data.cart.length);
                     }
                 })
+            });
+
+            let page = 1;
+            let cateFilter = [];
+
+            $(document).on('change',".filter_cate",function(){
+                if(this.checked){
+                    cateFilter.push($(this).attr("id"));
+                }
+                else{
+                    const index = cateFilter.indexOf($(this).attr("id"));
+                    cateFilter.splice(index, 1);
+                }
+                page = 1;
+                $.ajax({
+                        type: "post",
+                        url: "/api/v1/user/shop/paging",
+                        data: {page: page, cateFilter: cateFilter},
+                        dataType: "json",
+                        success: function(resp){
+                            $("#content_product").html("");
+                            resp.data.forEach(function(product){
+                                for(let i = 0; i < resp.imagem.length; i++){
+                                    if(resp.imagem[i].Product_Id == product.id){
+                                $("#content_product").append("<div class='bg-white shadow rounded overflow-hidden group'>"
+                                                                +    "<div class='relative'>"
+                        +"<img src='https://drive.google.com/uc?export=view&id="+resp.imagem[i].Image+"' alt='product 1' class='w-ful'>"
+                        + "<div class='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition'>"
+                            +"<a href='#'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='view product'>"
+                                +"<i class='fa-solid fa-magnifying-glass'></i>"
+                           + "</a>"
+                            + "<a href='#'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='add to wishlist'>"
+                                +"<i class='fa-solid fa-heart'></i>"
+                            +"</a>"
+                        +"</div>"
+                    +"</div>"
+                    +"<div class='pt-4 pb-3 px-4'>"
+                       + "<a href='#'>"
+                            +"<h4 id='product_name' class='uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition'>"
+                               + "" +product.Product_name+"</h4>"
+                        +"</a>"
+                        +"<div class='flex items-baseline mb-1 space-x-2'>"
+                            +"<p class='text-xl text-primary font-semibold'>$"+product.Price+"</p>"
+                            +"<p class='text-sm text-gray-400 line-through'>$55.90</p>"
+                        +"</div>"
+                        +"<div class='flex items-center'>"
+                           + "<div class='flex gap-1 text-sm text-yellow-400'>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                            +"</div>"
+                            +"<div class='text-xs text-gray-500 ml-3'>(150)</div>"
+                        +"</div>"
+                   + "</div>"
+                    +"<button type='button' product_id='"+product.id+"'"
+                        +"class='add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition'>Add"
+                       + " to cart</button>"
+                +"</div>");
+                            }  
+                        }
+                    })
+                    count_page = resp.count;
+                    $("#select_page").html("");
+                    for(let i = 1; i < (count_page / 6) + 1; i++){
+                        if(i === page){
+                        $("#select_page").append("<button type='button' id='"+i+"' class='text-sm font-medium leading-none cursor-pointer text-indigo-700 dark:text-indigo-400 border-t border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }
+                        else{
+                            $("#select_page").append("<button type='button' id='"+i+"' class='number_page text-sm font-medium leading-none cursor-pointer text-gray-600 dark:text-gray-200 hover:text-indigo-700 dark:hover:text-indigo-400 border-t border-transparent hover:border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }       
+                    }
+                        }
+                    })
+
+            });
+
+            $(document).on('click',"#previous_page",function(){
+                if(page > 1){
+                        --page;
+                        $.ajax({
+                        type: "post",
+                        url: "/api/v1/user/shop/paging",
+                        data: {page: page, cateFilter: cateFilter},
+                        dataType: "json",
+                        success: function(resp){
+                            $("#content_product").html("");
+                            resp.data.forEach(function(product){
+                                for(let i = 0; i < resp.imagem.length; i++){
+                                    if(resp.imagem[i].Product_Id == product.id){
+                                $("#content_product").append("<div class='bg-white shadow rounded overflow-hidden group'>"
+                                                                +    "<div class='relative'>"
+                        +"<img src='https://drive.google.com/uc?export=view&id="+resp.imagem[i].Image+"' alt='product 1' class='w-ful'>"
+                        + "<div class='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition'>"
+                            +"<a href='#'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='view product'>"
+                                +"<i class='fa-solid fa-magnifying-glass'></i>"
+                           + "</a>"
+                            + "<a href='#'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='add to wishlist'>"
+                                +"<i class='fa-solid fa-heart'></i>"
+                            +"</a>"
+                        +"</div>"
+                    +"</div>"
+                    +"<div class='pt-4 pb-3 px-4'>"
+                       + "<a href='#'>"
+                            +"<h4 id='product_name' class='uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition'>"
+                               + "" +product.Product_name+"</h4>"
+                        +"</a>"
+                        +"<div class='flex items-baseline mb-1 space-x-2'>"
+                            +"<p class='text-xl text-primary font-semibold'>$"+product.Price+"</p>"
+                            +"<p class='text-sm text-gray-400 line-through'>$55.90</p>"
+                        +"</div>"
+                        +"<div class='flex items-center'>"
+                           + "<div class='flex gap-1 text-sm text-yellow-400'>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                            +"</div>"
+                            +"<div class='text-xs text-gray-500 ml-3'>(150)</div>"
+                        +"</div>"
+                   + "</div>"
+                    +"<button type='button' product_id='"+product.id+"'"
+                        +"class='add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition'>Add"
+                       + " to cart</button>"
+                +"</div>");
+                            }  
+                        }
+                    })
+
+                    $("#select_page").html("");
+                    for(let i = 1; i < (count_page / 6) + 1; i++){
+                        if(i === page){
+                        $("#select_page").append("<button type='button' id='"+i+"' class='text-sm font-medium leading-none cursor-pointer text-indigo-700 dark:text-indigo-400 border-t border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }
+                        else{
+                            $("#select_page").append("<button type='button' id='"+i+"' class='number_page text-sm font-medium leading-none cursor-pointer text-gray-600 dark:text-gray-200 hover:text-indigo-700 dark:hover:text-indigo-400 border-t border-transparent hover:border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }       
+                    }
+                        }
+                    })
+                }
+            });
+
+            $(document).on('click',"#next_page",function(){
+                if(page < (count_page / 6)){
+                        ++page;
+                        $.ajax({
+                        type: "post",
+                        url: "/api/v1/user/shop/paging",
+                        data: {page: page, cateFilter: cateFilter},
+                        dataType: "json",
+                        success: function(resp){
+                            $("#content_product").html("");
+                            resp.data.forEach(function(product){
+                                for(let i = 0; i < resp.imagem.length; i++){
+                                    if(resp.imagem[i].Product_Id == product.id){
+                                $("#content_product").append("<div class='bg-white shadow rounded overflow-hidden group'>"
+                                                                +    "<div class='relative'>"
+                        +"<img src='https://drive.google.com/uc?export=view&id="+resp.imagem[i].Image+"' alt='product 1' class='w-ful'>"
+                        + "<div class='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition'>"
+                            +"<a href='#'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='view product'>"
+                                +"<i class='fa-solid fa-magnifying-glass'></i>"
+                           + "</a>"
+                            + "<a href='#'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='add to wishlist'>"
+                                +"<i class='fa-solid fa-heart'></i>"
+                            +"</a>"
+                        +"</div>"
+                    +"</div>"
+                    +"<div class='pt-4 pb-3 px-4'>"
+                       + "<a href='#'>"
+                            +"<h4 id='product_name' class='uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition'>"
+                               + "" +product.Product_name+"</h4>"
+                        +"</a>"
+                        +"<div class='flex items-baseline mb-1 space-x-2'>"
+                            +"<p class='text-xl text-primary font-semibold'>$"+product.Price+"</p>"
+                            +"<p class='text-sm text-gray-400 line-through'>$55.90</p>"
+                        +"</div>"
+                        +"<div class='flex items-center'>"
+                           + "<div class='flex gap-1 text-sm text-yellow-400'>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                            +"</div>"
+                            +"<div class='text-xs text-gray-500 ml-3'>(150)</div>"
+                        +"</div>"
+                   + "</div>"
+                    +"<button type='button' product_id='"+product.id+"'"
+                        +"class='add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition'>Add"
+                       + " to cart</button>"
+                +"</div>");
+                            }  
+                        }
+                    })
+
+                    $("#select_page").html("");
+                    for(let i = 1; i < (count_page / 6) + 1; i++){
+                        if(i === page){
+                        $("#select_page").append("<button type='button' id='"+i+"' class='text-sm font-medium leading-none cursor-pointer text-indigo-700 dark:text-indigo-400 border-t border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }
+                        else{
+                            $("#select_page").append("<button type='button' id='"+i+"' class='number_page text-sm font-medium leading-none cursor-pointer text-gray-600 dark:text-gray-200 hover:text-indigo-700 dark:hover:text-indigo-400 border-t border-transparent hover:border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }       
+                    }
+
+                        }
+                    })
+                }
+            });
+    
+            $(document).on('click',".number_page",function(){
+                        page = Number($(this).attr("id"));
+                        $.ajax({
+                        type: "post",
+                        url: "/api/v1/user/shop/paging",
+                        data: {page: page, cateFilter: cateFilter},
+                        dataType: "json",
+                        success: function(resp){
+                            $("#content_product").html("");
+                            resp.data.forEach(function(product){
+                                for(let i = 0; i < resp.imagem.length; i++){
+                                    if(resp.imagem[i].Product_Id == product.id){
+                                $("#content_product").append("<div class='bg-white shadow rounded overflow-hidden group'>"
+                                                                +    "<div class='relative'>"
+                        +"<img src='https://drive.google.com/uc?export=view&id="+resp.imagem[i].Image+"' alt='product 1' class='w-ful'>"
+                        + "<div class='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition'>"
+                            +"<a href='#'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='view product'>"
+                                +"<i class='fa-solid fa-magnifying-glass'></i>"
+                           + "</a>"
+                            + "<a href='#'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='add to wishlist'>"
+                                +"<i class='fa-solid fa-heart'></i>"
+                            +"</a>"
+                        +"</div>"
+                    +"</div>"
+                    +"<div class='pt-4 pb-3 px-4'>"
+                       + "<a href='#'>"
+                            +"<h4 id='product_name' class='uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition'>"
+                               + "" +product.Product_name+"</h4>"
+                        +"</a>"
+                        +"<div class='flex items-baseline mb-1 space-x-2'>"
+                            +"<p class='text-xl text-primary font-semibold'>$"+product.Price+"</p>"
+                            +"<p class='text-sm text-gray-400 line-through'>$55.90</p>"
+                        +"</div>"
+                        +"<div class='flex items-center'>"
+                           + "<div class='flex gap-1 text-sm text-yellow-400'>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                            +"</div>"
+                            +"<div class='text-xs text-gray-500 ml-3'>(150)</div>"
+                        +"</div>"
+                   + "</div>"
+                    +"<button type='button' product_id='"+product.id+"'"
+                        +"class='add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition'>Add"
+                       + " to cart</button>"
+                +"</div>");
+                            }  
+                        }
+                    })
+
+                    $("#select_page").html("");
+                    for(let i = 1; i < (count_page / 6) + 1; i++){
+                        if(i === page){
+                        $("#select_page").append("<button type='button' id='"+i+"' class='text-sm font-medium leading-none cursor-pointer text-indigo-700 dark:text-indigo-400 border-t border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }
+                        else{
+                            $("#select_page").append("<button type='button' id='"+i+"' class='number_page text-sm font-medium leading-none cursor-pointer text-gray-600 dark:text-gray-200 hover:text-indigo-700 dark:hover:text-indigo-400 border-t border-transparent hover:border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }       
+                    }
+
+                        }
+                    })
             })
-    })
+    
+            $(document).on('focusout',".search", function(){
+                $("#result_content").html("");
+            })
+
+
+            $(document).on('focus',".search", function(){
+                if($(this).val().trim().length == 0){
+                $("#result_content").html("");
+                }
+                else{
+                $.ajax({
+                    url: "/api/v1/user/shop/search",
+                    type: "post",
+                    data: {data: $(this).val()},
+                    dataType: "json",
+                    success: function(resp){
+                        resp.data.forEach(function(product){
+                            for(let i = 0; i < resp.imagem.length; i++){
+                                    if(resp.imagem[i].Product_Id == product.id){
+                        $("#result_content").append("<div class='absolute mt-2 w-full max-w-xl overflow-hidden rounded-md bg-white'>" 
+                                                        +"<div class='cursor-pointer py-2 px-3 hover:bg-slate-100 flex gap-x-2'>"
+                                                       + "<img class='w-10 h-10 'src='https://drive.google.com/uc?export=view&id="+ resp.imagem[i].Image +"' alt='Product'>"  
+                                                       + "<div>"
+                                                        +"<p class='text-sm font-medium text-gray-600'>"+ product.Product_name +"</p>"
+                                                       + "<p class='text-sm text-gray-500'>$"+ product.Price +"</p>"
+                                                            +"</div>"
+                                                       + "</div>"
+                                                  +  "</div>")
+                                                       }
+                                                    }
+                                                })                        
+                    }
+                })
+            }
+            })
+
+
+            $(document).on('input',".search", function(){
+                if($(this).val().trim().length == 0){
+                $("#result_content").html("");
+                }
+                else{
+                $.ajax({
+                    url: "/api/v1/user/shop/search",
+                    type: "post",
+                    data: {data: $(this).val()},
+                    dataType: "json",
+                    success: function(resp){
+                        resp.data.forEach(function(product){
+                            for(let i = 0; i < resp.imagem.length; i++){
+                                    if(resp.imagem[i].Product_Id == product.id){
+                        $("#result_content").append("<div class='absolute mt-2 w-full max-w-xl overflow-hidden rounded-md bg-white'>" 
+                                                        +"<div class='cursor-pointer py-2 px-3 hover:bg-slate-100 flex gap-x-2'>"
+                                                       + "<img class='w-10 h-10 'src='https://drive.google.com/uc?export=view&id="+ resp.imagem[i].Image +"' alt='Product'>"  
+                                                       + "<div>"
+                                                        +"<p class='text-sm font-medium text-gray-600'>"+ product.Product_name +"</p>"
+                                                       + "<p class='text-sm text-gray-500'>$"+ product.Price +"</p>"
+                                                            +"</div>"
+                                                       + "</div>"
+                                                  +  "</div>")
+                                                       }
+                                                    }
+                                                })                        
+                    }
+                })
+            }
+            })
+    
+        })
+
     </script>
 </body>
 

@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const {v4: uuidv4} = require("uuid");
 
 const ProductSchema = new mongoose.Schema({
-    id: {type: String, default: uuidv4()},
+    id: String,
     Product_name: String,
-    Category_id: {type: String}, 
+    Category_id: {type: String},
     Description: String,
     Price: Number,
     Quantity: Number,
@@ -12,6 +12,10 @@ const ProductSchema = new mongoose.Schema({
     isDeleted: {type: Boolean, default: false},
     Create_at: Date,
     Update_at: Date
+})
+
+ProductSchema.pre("save", function(){
+    this.id = uuidv4()
 })
 
 module.exports = mongoose.model("product",ProductSchema);

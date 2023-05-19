@@ -37,10 +37,11 @@ router.get("/login", (req,res) => {
         } 
         else{      
             res.cookie("token",req.token,{
-                httpOnly: true,
-                secure: false,
+                httpOnly: false,  // khi sử dụng https để true
+                secure: false, // khi deploy để true
                 path: "/api/v1",
-                sameSite: "strict"
+                sameSite: "strict",
+                maxAge: 24 * 60 * 60 * 1000 // 1 day
             });
            res.json({accessToken: req.token});
         }

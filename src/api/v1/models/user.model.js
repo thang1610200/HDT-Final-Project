@@ -8,7 +8,7 @@ const fs = require("fs");
 const {client} = require("@common/Redis");
 
 const user = new mongoose.Schema({
-    id: {type: String, default: uuidv4()},
+    id: String,
     fullname: String,
     email: String,
     phone: String,
@@ -27,6 +27,7 @@ const user = new mongoose.Schema({
 
 user.pre('save',function() {
     const salts = bcrypt.genSaltSync(10);
+    this.id = uuidv4()
     this.password = bcrypt.hashSync(this.password,salts);
     this.email_code = random.generate(25);
     this.phone_code = random.generate(25);

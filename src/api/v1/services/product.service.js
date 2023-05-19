@@ -2,13 +2,13 @@ require("module-alias/register");
 const product = require("@model/product.model");
 
 module.exports = {
-    findAll: async () => {
+    findAll: async () => {      // lọc tất cả các dòng => 1 mảng
         return await product.find();
     },
-    createProduct: async (name, cate_id, des, price, quantity) => {
+    createProduct: async (name, cate_id, des, price, quantity) => {    // Tạo 1 dữ liệu mới
         return await product.create({Product_name: name, Category_id: cate_id, Description: des, Price: price, Quantity: quantity, Create_at: new Date(), Update_at: new Date()});
     },
-    findAllandCategory: async () => {
+    findAllandCategory: async () => {      // Kết bảng Product và Category lưu vào 1 thuộc tính là categorydetail (1 mảng)
         return await product.aggregate([
         { $lookup:
             {
@@ -19,7 +19,7 @@ module.exports = {
             }
         }]);
     },
-    totalProductbyCate: async () => {
+    totalProductbyCate: async () => {       // tìm tổng sản phẩm thuộc Category (bỏ)
         return await product.aggregate([
         { $lookup:
             {
@@ -47,10 +47,10 @@ module.exports = {
             }
           }]);
     },
-    findOnebyId: async (id) => {
+    findOnebyId: async (id) => {    // lọc 1 dòng theo Id
         return await product.findOne({id});
     },
-    findAllandCategorybyId: async (id) => {
+    findAllandCategorybyId: async (id) => { // Kết bảng Product với Category và lọc theo productId
       return await product.aggregate([
       { $lookup:
           {
@@ -61,17 +61,33 @@ module.exports = {
           }
       },
     {
-      $match : {id}
+      $match : {id} // giống Where in SQL
     }]);
   },
-  findOnebyName: async (name) => {
+  findOnebyName: async (name) => {   // Lọc 1 dòng theo Product_name
     return await product.findOne({Product_name: name});
 },
-  updateProduct: async (id, Product_name, Category_id, Description, Price, Quantity) => {
+  updateProduct: async (id, Product_name, Category_id, Description, Price, Quantity) => {   // Cập nhật dữ liệu
     return await product.updateOne({id}, {Product_name, Category_id, Description, Price, Quantity, Update_at: new Date()});
   },
-  deleteProduct: async (id) => {
+  deleteProduct: async (id) => { // // Cập nhật dữ liệu
     return await product.updateOne({id},{isDeleted: true});
+  },
+  pagingAndfilterCate: async (page,cateId) => { // lọc Category và phân trang
+    let pageSize = 6;
+    if(!cateId){
+      return await product.find({isDeleted: false}).skip((page - 1) * pageSize).limit(pageSize);
+    }
+    return await product.find({isDeleted: false, Category_id:{$in: cateId}}).skip((page - 1) * pageSize).limit(pageSize);
+  },
+  countProductFilterCate: async (cateId) => { // tổng số sản phẩm khi lọc Category
+    if(!cateId){
+      return await product.find({isDeleted: false});
+    }
+    return await product.find({isDeleted: false, Category_id:{$in: cateId}});
+  },
+  findProductName: async (name) => { // tìm theo tên của sản phẩm
+      return await product.find({Product_name: {$regex: name}});
   }
 
 }
