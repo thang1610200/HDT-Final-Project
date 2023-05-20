@@ -9,7 +9,10 @@ require("module-alias/register");
 const { validationResult } = require('express-validator');
 const RegisterValidation = require("@validation/register.validation");
 const LoginValidation = require("@validation/login.validation");
+const ForgotPassValidator = require("@validation/forgot_pass.validation");
+const ResetPassValidator = require("@validation/reset_pass.validation");
 const UserService = require("@service/user.service");
+const ResetPassService = require("@service/resetpass.service");
 const passportConfig = require("@config/passport.config");
 const {client} = require("@common/Redis");
 require("dotenv").config();
@@ -169,5 +172,55 @@ router.get('/logout',(req,res,next) => {
         })
     });
 })
+//======================================logout
+
+//==============================Forgot Pass
+router.get("/forgot_password", (req,res) => {
+    res.render("forgot_password");
+})
+    .post('/forgot_password',ForgotPassValidator, (req,res,next) => {
+        const errors = validationResult(req,next);
+        if(!errors.isEmpty()){
+            res.json({errors});
+        }
+        else{
+            res.json({email: req.reset.email});
+        }
+})
+
+router.get("/forgot_password/reset", async (req,res,next) => {
+    const {token, email} = req.query;
+    const resetPass = await ResetPassService.findEmail(email);
+    if(resetPass == token){
+        res.render("reset_password",{email: email});
+    }
+    else{
+        return next(new createError.Forbidden());
+    }
+})
+    .post('/forgot_password/reset',ResetPassValidator ,async (req,res,next) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            res.json({errors});
+        }
+        else{
+            const {email,password} = req.body;
+            await UserService.updatePass(email, password);
+            try {
+               const rePass = await ResetPassService.delEmail(email);
+               if(rePass == 0){
+                    return res.json({statusCode: 403});
+               }
+               else{
+                    return res.json({statusCode: 200});
+               }
+            }
+            catch(err){
+                return next(new createError.InternalServerError());
+            }
+        }
+})
+//========================================Forgot Pass
+
 
 module.exports = router;

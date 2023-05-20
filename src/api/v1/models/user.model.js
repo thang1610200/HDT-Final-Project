@@ -5,7 +5,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("module-alias/register");
 const fs = require("fs");
+require("dotenv").config();
 const {client} = require("@common/Redis");
+const {sendMail} = require("@util/mail.js");
 
 const user = new mongoose.Schema({
     id: String,
@@ -55,6 +57,18 @@ user.methods.GenerateAccessToken = function(){
                 resolve(token);
             })
         })
+    });
+}
+
+user.methods.TokenResetPass = function(){
+    return new Promise( (resolve, reject) => {
+        const generalToken = random.generate(50);
+        client.set(this.email, generalToken, 'EX', 3 * 60, (err, reply) => {
+            if(err) reject(err);
+            resolve(reply);
+        })
+        const url = `${process.env.URL}/api/v1/guest/forgot_password/reset?token=${generalToken}&email=${this.email}`;
+        sendMail(this.email,url);
     });
 }
 
