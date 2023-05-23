@@ -20,3 +20,13 @@
 20-05-2023	06:16:20==============/api/v1/guest/forgot_password/reset?token=YD1yzIzYBWAnGZ32KYNUeWeJwqYkPDcS9vCJriUCMZY1YPFDbt&email=nguyenhuuthang9440@gmail.com====GET====ForbiddenError: Forbidden
 20-05-2023	06:16:20==============/favicon.ico====GET====NotFoundError: This route does not exist
 20-05-2023	34:17:20==============/api/v1/guest/forgot_password/reset====POST====InternalServerError: Internal Server Error
+20-05-2023	03:49:21==============/api/v1/user/shop====GET====TypeError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\shop.ejs:289
+    287| 
+    288|             <div id="content_product" class="grid grid-cols-3 gap-6">
+ >> 289|                 <% data.forEach(function(product){ %>
+    290|                 <div class="bg-white shadow rounded overflow-hidden group">
+    291|                     <div class="relative">
+    292|                         <% for(let i =0; i < imagem.length; i++){ %>
+
+Cannot read properties of undefined (reading 'forEach')
+20-05-2023	03:49:21==============/favicon.ico====GET====NotFoundError: This route does not exist

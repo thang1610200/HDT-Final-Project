@@ -1,0 +1,4 @@
+22-05-2023	17:16:09==============/api/v1/product_detail/quantity_dec====POST====NotFoundError: This route does not exist
+22-05-2023	03:24:13==============/api/v1/admin====GET====NotFoundError: This route does not exist
+22-05-2023	03:24:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+22-05-2023	43:04:20==============/api/v1/profile====POST====NotFoundError: This route does not exist

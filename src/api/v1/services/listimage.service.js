@@ -30,5 +30,8 @@ module.exports = {
     },
     dellistimage: async (id) => {
         return await ImageModel.updateOne({id},{isDeleted: true});
+    },
+    getImageByProductId: async (id) => { // lọc tất cả các dòng theo ProductId và isDeleted = false
+        return await ImageModel.find({Product_Id: id, isDeleted: false});
     }
 }

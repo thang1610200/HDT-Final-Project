@@ -44,8 +44,34 @@ function checkURLadmin(req,res,next){
     return next(new createError.Forbidden());
 }
 
+function publicURL(req,res,next){
+    const publickey = fs.readFileSync("./src/api/v1/keys/publickey.crt");
+    const token = req.cookies.token;
+    if(!token){
+        req.user = null;
+        return next();
+    }
+    jwt.verify(token,publickey,{ algorithms: ['RS256'] },(err,data) => {
+        if(err){
+            return res.redirect("/api/v1/guest/login");
+        }
+        client.get(data.id, (err,reply) => {
+            if(err){
+                return next(new createError.InternalServerError());
+            }
+            if(reply === null){
+                req.user = null;
+                return next();
+            }
+            req.user = data;
+            return next();
+        })
+    });
+}
+
 module.exports = {
     verifyToken: verifyToken,
     checkURLuser: checkURLuser,
-    checkURLadmin: checkURLadmin
+    checkURLadmin: checkURLadmin,
+    publicURL :publicURL
 };

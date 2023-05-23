@@ -115,6 +115,41 @@ router.get("/listimage/:id", async (req,res) => {
         return res.redirect(req.baseUrl + '/listimage/'+product_id);
 })
 
+//=========================Attribute
+// router.get("/attribute", async (req,res) => {
+//     const attr = await attributeService.getAll();
+//     res.render("attribute", {attr: attr, format: format});
+// })
+//     .post("/attribute", async (req,res) => {
+//         const name = req.body.attribute_name;
+//         await attributeService.createAttribute(name);
+//         res.redirect(req.baseUrl + '/attribute');
+// })
+//     .post("/check_attribute", async (req,res) => {
+//         const attribute = await attributeService.findOnebyName(req.body.content);
+//         if(attribute){
+//             return res.json({"status":"No"});
+//         }
+//         else{
+//             return res.json({"status": "OK"});
+//         }
+// })
+//     .post("/attribute/edit_infor", async (req,res) => {
+//         const attribute = await attributeService.findOnebyId(req.body.id);
+//         return res.json({"data": attribute});
+// })
+//     .post("/edit_attribute", async (req,res) => {
+//         await attributeService.updateAttribute(req.body.category_id_edit, req.body.category_name_edit);
+//         res.redirect(req.baseUrl + '/attribute');
+// })
+//     .post("/delete_attribute", async (req,res) => {
+//         await attributeService.deleteAttribute(req.body.category_id_delete);
+//         res.redirect(req.baseUrl + '/attribute');
+// })
+//     .post("/attribute/value_infor", async (req,res) => {
+
+// })
+
 
 
 module.exports = router;

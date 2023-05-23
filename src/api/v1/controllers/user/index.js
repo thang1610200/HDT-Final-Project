@@ -1,41 +1,93 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+const fs = require('fs');
+const createError = require('http-errors');
+require("dotenv").config();
+const multer = require('multer');
 require("module-alias/register");
 const Author = require("@middleware/Author.middleware");
-const productService = require("@service/product.service");
-const listimageService = require("@service/listimage.service");
+const userService = require("@service/user.service");
 const cartService = require("@service/cart.service");
-const categoryService = require("@service/category.service");
+const drive = require("@util/drive");
+const {sendMail} = require("@util/mail.js");
+const NewpassValidator = require("@validation/newpass.validation");
+const {client} = require("@common/Redis");
+const { validationResult } = require('express-validator');
+
 
 router.use(Author.verifyToken);
 router.use(Author.checkURLuser);
-router.get("/shop", async (req,res) => {
-    const countProduct = await productService.findAll();
-    const product = await productService.pagingAndfilterCate(1);
-    const image = await listimageService.getMainImage();
+
+const upload = multer();
+router.get("/profile", async (req,res) => {
+    const user = await userService.getUserbyId(req.user.id);
     const cart = await cartService.getItembyUserId(req.user.id);
-    const cate = await categoryService.catejoinProductbyDel();
-    res.render("shop",{data: product, count: countProduct.length, sum_cart:cart, imagem: image, cate: cate});
+    res.render("profile",{data: user, sum_cart:cart});
 })
-    .post("/shop", async (req,res) => {
-        const {id} = req.body;
-        const product = await productService.findOnebyId(id);
-        const cart = await cartService.addCart(req.user.id, product.id, product.Price);
-        const cartitem = await cartService.getItembyCartId(cart.Cart_id);
-        return res.json({cart: cartitem});
+    .post("/profile",upload.single("photo"), async (req,res) => {
+        const {fullname, address, phone} = req.body;
+        var drives;
+        if(req.file){
+            drives = await drive.uploadFile(req.file);
+        }
+        var user;
+        if(!phone){
+            user = await userService.updateInforNoPhone(req.user.id, fullname, address, drives);
+        }
+        else{
+            user = await userService.updateInfor(req.user.id, fullname, address, phone, drives);
+        }
+        res.json({data:user});
 })
-    .post("/shop/paging", async (req,res) => {
-        const {page, cateFilter} = req.body;
-        const image = await listimageService.getMainImage();
-        const product = await productService.pagingAndfilterCate(page,cateFilter);
-        const countProduct = await productService.countProductFilterCate(cateFilter);
-        res.json({data: product, count: countProduct.length, imagem: image});
+
+// gửi email xác nhận tới User
+router.get('/email',async (req,res) => {
+    const user = await userService.getUserbyId(req.user.id);
+    if(!user.isEmailActive){
+        const url = `${process.env.URL}/api/v1/email/verify/${user.email_code}`;
+         sendMail(user.email,url);
+         res.render("checkmail",{data: user});
+    }
+    else{
+        res.redirect("/api/v1/user/profile");
+    }
 })
-    .post("/shop/search", async (req,res) => {
-        const {data} = req.body;
-        const product = await productService.findProductName(new RegExp("^" + data,"i"));
-        const image = await listimageService.getMainImage();
-        res.json({data: product, imagem: image});
+
+//đặt lại Password mới
+router.get('/newpass',async (req,res) =>{
+    const user = await userService.getUserbyId(req.user.id);
+    const cart = await cartService.getItembyUserId(req.user.id);
+    if(!user.password){
+        return res.redirect("/api/v1/user/setpass");
+    }
+    res.render('change_password',{data: user, sum_cart:cart});
 })
+    .post('/newpass',NewpassValidator, async(req,res,next) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            res.json({errors});
+        } 
+        else{
+            await userService.updatePassbyID(req.user.id, req.body.newpass);
+            const publickey = fs.readFileSync("./src/api/v1/keys/publickey.crt");
+            const token = req.cookies.token;
+            jwt.verify(token,publickey,{ algorithms: ['RS256'] },(err,data) => {
+                if(err){
+                    return next(new createError.InternalServerError());
+                }
+                client.del(data.id, (err,reply) => {
+                    if(err){
+                        return next(new createError.InternalServerError());
+                    }
+                    if(reply === 1){
+                        res.clearCookie("token",{ path: '/api/v1' });
+                        return res.json({statusCode:200});
+                    }
+                })
+            });
+        }
+})
+
 
 module.exports = router;

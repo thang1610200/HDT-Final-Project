@@ -73,12 +73,34 @@ module.exports = {
   deleteProduct: async (id) => { // // Cập nhật dữ liệu
     return await product.updateOne({id},{isDeleted: true});
   },
-  pagingAndfilterCate: async (page,cateId) => { // lọc Category và phân trang
+  pagingAndfilterCate: async (page,cateId,sortProduct) => { // lọc Category và phân trang và sort
     let pageSize = 6;
     if(!cateId){
-      return await product.find({isDeleted: false}).skip((page - 1) * pageSize).limit(pageSize);
+      if(sortProduct === "0"){
+        return await product.find({isDeleted: false}).skip((page - 1) * pageSize).limit(pageSize);
+      }
+      else if(sortProduct === "1"){
+        return await product.find({isDeleted: false}).skip((page - 1) * pageSize).limit(pageSize).sort({"Price":1});
+      }
+      else if(sortProduct === "2"){
+        return await product.find({isDeleted: false}).skip((page - 1) * pageSize).limit(pageSize).sort({"Price":-1});
+      }
+      else if(sortProduct === "3"){
+        return await product.find({isDeleted: false}).skip((page - 1) * pageSize).limit(pageSize).sort({"Create_at":-1});
+      }
     }
-    return await product.find({isDeleted: false, Category_id:{$in: cateId}}).skip((page - 1) * pageSize).limit(pageSize);
+    if(sortProduct === "0"){
+      return await product.find({isDeleted: false, Category_id:{$in: cateId}}).skip((page - 1) * pageSize).limit(pageSize);
+    }
+    else if(sortProduct === "1"){
+      return await product.find({isDeleted: false, Category_id:{$in: cateId}}).skip((page - 1) * pageSize).limit(pageSize).sort({"Price":1});
+    }
+    else if(sortProduct === "2"){
+      return await product.find({isDeleted: false, Category_id:{$in: cateId}}).skip((page - 1) * pageSize).limit(pageSize).sort({"Price":-1});
+    }
+    else if(sortProduct === "3"){
+      return await product.find({isDeleted: false, Category_id:{$in: cateId}}).skip((page - 1) * pageSize).limit(pageSize).sort({"Create_at":-1});
+    }
   },
   countProductFilterCate: async (cateId) => { // tổng số sản phẩm khi lọc Category
     if(!cateId){
@@ -88,6 +110,10 @@ module.exports = {
   },
   findProductName: async (name) => { // tìm theo tên của sản phẩm
       return await product.find({Product_name: {$regex: name}});
+  },
+  paging: async (page) => { // phân trang
+    let pageSize = 6;
+    return await product.find({isDeleted: false}).skip((page - 1) * pageSize).limit(pageSize);
   }
 
 }

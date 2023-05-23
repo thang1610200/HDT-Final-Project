@@ -44,5 +44,54 @@ module.exports = {
     {
         $match: {isDeleted: false}
     }]);
+    },
+    getAllProductbyCate: async (id) => { // lọc tất cả các sản phẩm theo Cate
+        return await category.aggregate([
+            { $lookup:
+                {
+                  from: 'products',
+                  localField: 'id',
+                  foreignField: 'Category_id',
+                  as: 'productdetail'
+                }
+            },
+        {
+            $match: {isDeleted: false, id}
+        }]);
+    },
+    getAllProductAndImagebyCate: async (id) => { // lọc tất cả các sản phẩm và hình ảnh theo Cate
+        return await category.aggregate([
+            { $lookup:
+                {
+                  from: 'products',
+                  localField: 'id',
+                  foreignField: 'Category_id',
+                  as: 'productdetail'
+                }
+            },
+        {
+            $match: {isDeleted: false, id}
+        },
+        {
+            $unwind: "$productdetail"
+        },
+        { "$addFields": { "product_id": "$productdetail.id" }},
+        {
+            $lookup:
+                {
+                  from: 'listimages',
+                  localField: 'product_id',
+                  foreignField: 'Product_Id',
+                  as: 'image_product'
+                }
+        },
+        {
+            $unwind: "$image_product"
+        },
+        {
+            $match: {"image_product.Main_Image": true}
+        }
+        ]);
     }
 }
+

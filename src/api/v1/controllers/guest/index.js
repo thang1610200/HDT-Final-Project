@@ -57,15 +57,15 @@ passport.use(new FacebookStrategy({
  router.get('/facebook/callback',                         // B5: trả về kết quả
    passport.authenticate('facebook', { failureRedirect: '/api/v1/guest/login' }),
    async function(req, res) {
-       const User = await UserService.getOnebyEmail(req.user.email);
-       res.cookie("token",await User.GenerateAccessToken(),{
+        const token = await UserService.generateTokenByEmail(req.user.email);
+      res.cookie("token",token,{
         httpOnly: false,  // khi sử dụng https để true
         secure: false, // khi deploy để true
         path: "/api/v1",
         sameSite: "strict",
         maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
-       res.redirect('/api/v1/user/shop');
+       res.redirect('/api/v1/shop');
    });
 //==========================Login FB ====================================//
 
@@ -97,18 +97,18 @@ passport.use(new GoogleStrategy({
    passport.authenticate('google', { failureRedirect: '/api/v1/guest/login' }),
    async function(req, res) {
      // Successful authentication, redirect home.
-     const User = await UserService.getOnebyEmail(req.user.email);
-     res.cookie("token",await User.GenerateAccessToken(),{
+     const token = await UserService.generateTokenByEmail(req.user.email);
+     res.cookie("token",token,{
       httpOnly: false,  // khi sử dụng https để true
       secure: false, // khi deploy để true
       path: "/api/v1",
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000 // 1 day
       });
-     return res.redirect('/api/v1/user/shop');
+    res.redirect('/api/v1/shop');
    });
 
-//==========================Login FB ====================================//
+//==========================Login GG ====================================//
 
 //==========================Register
 router.get("/register", (req,res) => {
@@ -221,6 +221,5 @@ router.get("/forgot_password/reset", async (req,res,next) => {
         }
 })
 //========================================Forgot Pass
-
 
 module.exports = router;

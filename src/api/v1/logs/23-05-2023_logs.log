@@ -1,0 +1,8 @@
+23-05-2023	16:05:09==============/user/email/verify/75U9Ob2AlmrWQGBqH44gTFmLg====GET====NotFoundError: This route does not exist
+23-05-2023	16:05:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+23-05-2023	12:23:09==============/customer/shop====GET====NotFoundError: This route does not exist
+23-05-2023	12:23:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+23-05-2023	05:51:09==============/api/v1/user/shop====GET====NotFoundError: This route does not exist
+23-05-2023	05:51:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+23-05-2023	34:09:10==============/api/v1/user/logout====GET====NotFoundError: This route does not exist
+23-05-2023	34:09:10==============/favicon.ico====GET====NotFoundError: This route does not exist

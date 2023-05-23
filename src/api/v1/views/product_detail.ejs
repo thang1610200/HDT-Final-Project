@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Ecommerce Tailwind</title>
+
+    <link rel="shortcut icon" href="/static/images/favicon/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        input[type='number']::-webkit-inner-spin-button,
+        input[type='number']::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      
+        .custom-number-input input:focus {
+          outline: none !important;
+        }
+      
+        .custom-number-input button:focus {
+          outline: none !important;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <!-- header -->
+    <header class="py-4 shadow-sm bg-white">
+        <div class="container flex items-center justify-between">
+            <a href="/api/v1">
+                <img src="/static/images/logo.svg" alt="Logo" class="w-32">
+            </a>
+
+            <div class="w-full max-w-xl relative flex">
+                <span class="absolute left-4 top-3 text-lg text-gray-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" name="search" id="search"
+                    class="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
+                    placeholder="search">
+                <button
+                    class="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                    <div class="text-2xl">
+                        <i class="fa-regular fa-heart"></i>
+                    </div>
+                    <div class="text-xs leading-3">Wishlist</div>
+                    <div
+                        class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                        8</div>
+                </a>
+                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                    <div class="text-2xl">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
+                    <div class="text-xs leading-3">Cart</div>
+                    <div id="count_cart"
+                        class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                        <% if(typeof sum_cart !== 'undefined'){ %> <% if(sum_cart.length > 0){%><%= sum_cart[0].cartdetail.length%><%} else{%>0<%}%>  <%} else {%> 0 <%}%></div>
+                </a>
+                <a href="/api/v1/user/profile" class="text-center text-gray-700 hover:text-primary transition relative">
+                    <div class="text-2xl">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div class="text-xs leading-3">Account</div>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!-- ./header -->
+
+    <!-- navbar -->
+    <nav class="bg-gray-800">
+        <div class="container flex">
+            <div class="px-8 py-4 bg-primary flex items-center cursor-pointer relative group">
+                <span class="text-white">
+                    <i class="fa-solid fa-bars"></i>
+                </span>
+                <span class="capitalize ml-2 text-white">All Categories</span>
+
+                <!-- dropdown -->
+                <div
+                    class="absolute w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible">
+                    <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
+                        <img src="/static/images/icons/sofa.svg" alt="sofa" class="w-5 h-5 object-contain">
+                        <span class="ml-6 text-gray-600 text-sm">Sofa</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
+                        <img src="/static/images/icons/terrace.svg" alt="terrace" class="w-5 h-5 object-contain">
+                        <span class="ml-6 text-gray-600 text-sm">Terarce</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
+                        <img src="/static/images/icons/bed.svg" alt="bed" class="w-5 h-5 object-contain">
+                        <span class="ml-6 text-gray-600 text-sm">Bed</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
+                        <img src="/static/images/icons/office.svg" alt="office" class="w-5 h-5 object-contain">
+                        <span class="ml-6 text-gray-600 text-sm">office</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
+                        <img src="/static/images/icons/outdoor-cafe.svg" alt="outdoor" class="w-5 h-5 object-contain">
+                        <span class="ml-6 text-gray-600 text-sm">Outdoor</span>
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 hover:bg-gray-100 transition">
+                        <img src="/static/images/icons/bed-2.svg" alt="Mattress" class="w-5 h-5 object-contain">
+                        <span class="ml-6 text-gray-600 text-sm">Mattress</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between flex-grow pl-12">
+                <div class="flex items-center space-x-6 capitalize">
+                    <a href="/api/v1" class="text-gray-200 hover:text-white transition">Home</a>
+                    <a href="/api/v1/shop" class="text-gray-200 hover:text-white transition">Shop</a>
+                    <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
+                    <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
+                </div>
+                <div id="author" class="text-gray-200 hover:text-white transition"><a href="/api/v1/guest/login">Login</a><a href="/api/v1/guest/register">/Register</a></div>
+            </div>
+        </div>
+    </nav>
+    <!-- ./navbar -->
+
+    <!-- breadcrumb -->
+    <div class="container py-4 flex items-center gap-3">
+        <a href="/api/v1" class="text-primary text-base">
+            <i class="fa-solid fa-house"></i>
+        </a>
+        <span class="text-sm text-gray-400">
+            <i class="fa-solid fa-chevron-right"></i>
+        </span>
+        <p class="text-gray-600 font-medium">Product</p>
+    </div>
+    <!-- ./breadcrumb -->
+
+    <!-- product-detail -->
+    <div class="container grid grid-cols-2 gap-6">
+        <div x-data="{ image: 0 }" x-cloak>
+            <% for(let i = 0; i < listimage.length; i++){ %>
+            <img x-show="image === <%= i%>" src="https://drive.google.com/uc?export=view&id=<%= listimage[i].Image%>" alt="product" class="w-full h-96">
+            <%}%>
+
+            <div class="grid grid-cols-5 gap-4 mt-4">
+                <% for(let i = 0; i < listimage.length; i++){ %>
+                    <img x-on:click="image = <%= i%>" src="https://drive.google.com/uc?export=view&id=<%= listimage[i].Image%>" alt="product2" :class="{ 'border-primary': image === <%= i%> }" class="w-full cursor-pointer border">
+                <%}%>    
+            </div>
+        </div>
+
+        <div>
+            <h2 class="text-3xl font-medium uppercase mb-2"><%= product[0].Product_name%></h2>
+            <div class="flex items-center mb-4">
+                <div class="flex gap-1 text-sm text-yellow-400">
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                </div>
+                <div class="text-xs text-gray-500 ml-3">(150 Reviews)</div>
+            </div>
+            <div class="space-y-2">
+                <p class="text-gray-800 font-semibold space-x-2">
+                    <span>Availability: </span>
+                    <span class="text-green-600"><% if(product[0].Sold >= product[0].Quantity){%> Out Of Stock <%}else{%>In Stock<%}%></span>
+                </p>
+                <p class="space-x-2">
+                    <!-- <span class="text-gray-800 font-semibold">Brand: </span>
+                    <span class="text-gray-600">Apex</span>
+                </p> -->
+                <p class="space-x-2">
+                    <span class="text-gray-800 font-semibold">Category: </span>
+                    <span class="text-gray-600"><%= product[0].categorydetail[0].Category_name%></span>
+                </p>
+                <!-- <p class="space-x-2">
+                    <span class="text-gray-800 font-semibold">SKU: </span>
+                    <span class="text-gray-600">BE45VGRT</span>
+                </p> -->
+            </div>
+            <div class="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
+                <p class="text-xl text-primary font-semibold">$<%= product[0].Price%></p>
+                <p class="text-base text-gray-400 line-through">$55.00</p>
+            </div>
+
+            <p class="mt-4 text-gray-600"><%= product[0].Description%></p>
+
+            <!-- <div class="pt-4">
+                <h3 class="text-sm text-gray-800 uppercase mb-1">Size</h3>
+                <div class="flex items-center gap-2">
+                    <div class="size-selector">
+                        <input type="radio" name="size" id="size-xs" class="hidden">
+                        <label for="size-xs"
+                            class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">XS</label>
+                    </div>
+                    <div class="size-selector">
+                        <input type="radio" name="size" id="size-sm" class="hidden">
+                        <label for="size-sm"
+                            class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">S</label>
+                    </div>
+                    <div class="size-selector">
+                        <input type="radio" name="size" id="size-m" class="hidden">
+                        <label for="size-m"
+                            class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">M</label>
+                    </div>
+                    <div class="size-selector">
+                        <input type="radio" name="size" id="size-l" class="hidden">
+                        <label for="size-l"
+                            class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">L</label>
+                    </div>
+                    <div class="size-selector">
+                        <input type="radio" name="size" id="size-xl" class="hidden">
+                        <label for="size-xl"
+                            class="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">XL</label>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- <div class="pt-4">
+                <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Color</h3>
+                <div class="flex items-center gap-2">
+                    <div class="color-selector">
+                        <input type="radio" name="color" id="red" class="hidden">
+                        <label for="red"
+                            class="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
+                            style="background-color: #fc3d57;"></label>
+                    </div>
+                    <div class="color-selector">
+                        <input type="radio" name="color" id="black" class="hidden">
+                        <label for="black"
+                            class="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
+                            style="background-color: #000;"></label>
+                    </div>
+                    <div class="color-selector">
+                        <input type="radio" name="color" id="white" class="hidden">
+                        <label for="white"
+                            class="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
+                            style="background-color: #fff;"></label>
+                    </div>
+
+                </div>
+            </div> -->
+
+            <div class="mt-4 custom-number-input h-10 w-32">
+                <h3 class="text-sm text-gray-800 uppercase mb-1">Quantity</h3>
+                <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
+                    <button data-action="decrement" class=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
+                      <span class="m-auto text-2xl font-thin">−</span>
+                    </button>
+                    <input type="number" readonly="true" class="focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none" name="custom-input-number" id="quantity" value="0"></input>
+                  <button id="increment" product_id="<%= product[0].id%>" data-action="increment" class="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
+                    <span class="m-auto text-2xl font-thin">+</span>
+                  </button>
+                </div>
+            </div>
+
+            <div class="mt-6 flex gap-3 border-b border-gray-200 pb-5 pt-5">
+                <button type="button" product_id="<%= product[0].id%>"
+                    class="add_cart bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
+                    <i class="fa-solid fa-bag-shopping"></i> Add to cart
+                </button>
+                <a href="#"
+                    class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
+                    <i class="fa-solid fa-heart"></i> Wishlist
+                </a>
+            </div>
+
+            <div class="flex gap-3 mt-4">
+                <a href="#"
+                    class="text-gray-400 hover:text-gray-500 h-8 w-8 rounded-full border border-gray-300 flex items-center justify-center">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="#"
+                    class="text-gray-400 hover:text-gray-500 h-8 w-8 rounded-full border border-gray-300 flex items-center justify-center">
+                    <i class="fa-brands fa-twitter"></i>
+                </a>
+                <a href="#"
+                    class="text-gray-400 hover:text-gray-500 h-8 w-8 rounded-full border border-gray-300 flex items-center justify-center">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- ./product-detail -->
+
+    <!-- description -->
+    <div class="container pb-16">
+        <h3 class="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Product details</h3>
+        <div class="w-3/5 pt-6">
+            <div class="text-gray-600">
+                <p><%= product[0].Description%></p>
+            </div>
+
+            <table class="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
+                <tr>
+                    <th class="py-2 px-4 border border-gray-300 w-40 font-medium">Color</th>
+                    <th class="py-2 px-4 border border-gray-300 ">Blank, Brown, Red</th>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border border-gray-300 w-40 font-medium">Material</th>
+                    <th class="py-2 px-4 border border-gray-300 ">Latex</th>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border border-gray-300 w-40 font-medium">Weight</th>
+                    <th class="py-2 px-4 border border-gray-300 ">55kg</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- ./description -->
+
+    <!-- related product -->
+    <div class="container pb-16">
+        <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">Related products</h2>
+        <div class="grid grid-cols-4 gap-6">
+            <% var count = 0; %>
+            <% for(let i = 0; i < productCate.length; i++){ %>
+                <% if(productCate[i].productdetail.id !== product[0].id){ %>
+                    <% count++; %>
+            <div class="bg-white shadow rounded overflow-hidden group">
+                <div class="relative">
+                    <img src="https://drive.google.com/uc?export=view&id=<%= productCate[i].image_product.Image%>" alt="product 1" class="w-full">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center 
+                    justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                        <a href="/api/v1/product_detail/<%= productCate[i].productdetail.id%>"
+                            class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
+                            title="view product">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </a>
+                        <a href="#"
+                            class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
+                            title="add to wishlist">
+                            <i class="fa-solid fa-heart"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="pt-4 pb-3 px-4">
+                    <a href="/api/v1/product_detail/<%= productCate[i].productdetail.id%>">
+                        <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition"><%= productCate[i].productdetail.Product_name %></h4>
+                    </a>
+                    <div class="flex items-baseline mb-1 space-x-2">
+                        <p class="text-xl text-primary font-semibold">$<%= productCate[i].productdetail.Price %></p>
+                        <p class="text-sm text-gray-400 line-through">$55.90</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex gap-1 text-sm text-yellow-400">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                        </div>
+                        <div class="text-xs text-gray-500 ml-3">(150)</div>
+                    </div>
+                </div>
+                <button type="button" product_id="<%= productCate[i].productdetail.id%>"
+                    class="add_cart_rel block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">Add
+                    to cart</button>
+            </div>
+            <%}%>
+                <% if(count == 4){break;} %>
+            <%}%>
+        </div>
+    </div>
+    <!-- ./related product -->
+
+    <!-- footer -->
+    <footer class="bg-white pt-16 pb-12 border-t border-gray-100">
+        <div class="container grid grid-cols-3">
+            <div class="col-span-1 space-y-8 mr-2">
+                <img src="/static/images/logo.svg" alt="logo" class="w-30">
+                <div class="mr-2">
+                    <p class="text-gray-500">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, hic?
+                    </p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-gray-500"><i
+                            class="fa-brands fa-facebook-square"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500"><i
+                            class="fa-brands fa-instagram-square"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500"><i
+                            class="fa-brands fa-twitter-square"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500">
+                        <i class="fa-brands fa-github-square"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-span-2 grid grid-cols-2 gap-8">
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Solutions</h3>
+                        <div class="mt-4 space-y-4">
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Marketing</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Analitycs</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Commerce</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Insights</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Support</h3>
+                        <div class="mt-4 space-y-4">
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Pricing</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Documentation</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Guides</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">API Status</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Solutions</h3>
+                        <div class="mt-4 space-y-4">
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Marketing</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Analitycs</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Commerce</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Insights</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Support</h3>
+                        <div class="mt-4 space-y-4">
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Pricing</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Documentation</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Guides</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">API Status</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- ./footer -->
+
+    <!-- copyright -->
+    <div class="bg-gray-800 py-4">
+        <div class="container flex items-center justify-between">
+            <p class="text-white">&copy; TailCommerce - All Right Reserved</p>
+            <div>
+                <img src="/static/images/methods.png" alt="methods" class="h-5">
+            </div>
+        </div>
+    </div>
+    <!-- ./copyright -->
+    <script src='https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+   <script>
+      function decrement(e) {
+    const btn = e.target.parentNode.parentElement.querySelector(
+      'button[data-action="decrement"]'
+    );
+    const target = btn.nextElementSibling;
+    let value = Number(target.value);
+    if(value === 0){
+        target.value = value;
+    }
+    else{
+        value--;
+        target.value = value;
+    }
+  }
+
+  function increment(e) {
+    const btn = e.target.parentNode.parentElement.querySelector(
+      'button[data-action="decrement"]'
+    );
+    const target = btn.nextElementSibling;
+    let value = Number(target.value);
+    $.ajax({
+        url: "/api/v1/product_detail/quantity_dec",
+        type: "post",
+        data: {id: $("#increment").attr("product_id")},
+        dataType: "json",
+        success: function(resp){
+            if(value === Number(resp.data.Quantity)){
+                target.value = value;
+            }
+            else{
+                value++;
+                target.value = value;
+            }
+        }
+    })
+  }
+
+  const decrementButtons = document.querySelectorAll(
+    `button[data-action="decrement"]`
+  );
+
+  const incrementButtons = document.querySelectorAll(
+    `button[data-action="increment"]`
+  );
+
+  decrementButtons.forEach(btn => {
+    btn.addEventListener("click", decrement);
+  });
+
+  incrementButtons.forEach(btn => {
+    btn.addEventListener("click", increment);
+  });
+
+    if($.cookie("token")){
+        $("#author").empty();
+        $("#author").append("<a href='/api/v1/guest/logout'>Logout</a>")
+    }
+
+    $(document).on('click',".add_cart_rel",function(){
+                $.ajax({
+                    url: "/api/v1/shop",
+                    type: "post",
+                    data: {id: $(this).attr("product_id")},
+                    dataType: 'json',
+                    success: function(data){
+                        if(data.statusCode === 200){
+                            $("#count_cart").empty();
+                            $("#count_cart").append(data.cart.length);
+                        }
+                        else if(data.statusCode === 403){
+                            window.location.href = "/api/v1/guest/login";
+                        }else if(data.statusCode === 500){
+                            alert("Hàng trong kho không đủ");
+                        }
+                    }
+                })
+            });
+
+    $(document).on('click',".add_cart",function(){
+                $.ajax({
+                    url: "/api/v1/product_detail",
+                    type: "post",
+                    data: {id: $(this).attr("product_id"), quantity: $("#quantity").val()},
+                    dataType: 'json',
+                    success: function(data){
+                        if(data.statusCode === 200){
+                            $("#count_cart").empty();
+                            $("#count_cart").append(data.cart.length);
+                        }
+                        else if(data.statusCode === 403){
+                            window.location.href = "/api/v1/guest/login";
+                        }else if(data.statusCode === 500){
+                            alert("Hàng trong kho không đủ");
+                        }
+                    }
+                })
+            });
+    </script>
+</body>
+</html>

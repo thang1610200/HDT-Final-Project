@@ -36,7 +36,7 @@
                 <button
                     class="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
                 </div>
-                <div id="result_content"> 
+                <div class='absolute mt-2 w-full max-w-xl overflow-hidden rounded-md bg-white' id="result_content"> 
                 </div>  
             </div>
 
@@ -57,9 +57,9 @@
                     <div class="text-xs leading-3">Cart</div>
                     <div id="count_cart"
                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                        <% if(sum_cart.length > 0){%><%= sum_cart[0].cartdetail.length%><%} else{%>0<%}%></div>
+                       <% if(typeof sum_cart !== 'undefined'){ %> <% if(sum_cart.length > 0){%><%= sum_cart[0].cartdetail.length%><%} else{%>0<%}%>  <%} else {%> 0 <%}%> </div>
                 </a>
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                <a href="/api/v1/user/profile" class="text-center text-gray-700 hover:text-primary transition relative">
                     <div class="text-2xl">
                         <i class="fa-regular fa-user"></i>
                     </div>
@@ -111,8 +111,8 @@
 
             <div class="flex items-center justify-between flex-grow pl-12">
                 <div class="flex items-center space-x-6 capitalize">
-                    <a href="/" class="text-gray-200 hover:text-white transition">Home</a>
-                    <a href="/customer/shop" class="text-gray-200 hover:text-white transition">Shop</a>
+                    <a href="/api/v1" class="text-gray-200 hover:text-white transition">Home</a>
+                    <a href="/api/v1/shop" class="text-gray-200 hover:text-white transition">Shop</a>
                     <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
                     <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
                 </div>
@@ -124,7 +124,7 @@
 
     <!-- breadcrumb -->
     <div class="container py-4 flex items-center gap-3">
-        <a href="/" class="text-primary text-base">
+        <a href="/api/v1" class="text-primary text-base">
             <i class="fa-solid fa-house"></i>
         </a>
         <span class="text-sm text-gray-400">
@@ -267,10 +267,10 @@
             <div class="flex items-center mb-4">
                 <select name="sort" id="sort"
                     class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
-                    <option value="default">Default sorting</option>
-                    <option value="price-low-to-high">Price low to high</option>
-                    <option value="price-high-to-low">Price high to low</option>
-                    <option value="latest">Latest product</option>
+                    <option value="0">Default sorting</option>
+                    <option value="1">Price low to high</option>
+                    <option value="2">Price high to low</option>
+                    <option value="3">Latest product</option>
                 </select>
 
                 <div class="flex gap-2 ml-auto">
@@ -292,11 +292,11 @@
                         <% for(let i =0; i < imagem.length; i++){ %>
                             <% if(imagem[i].Product_Id == product.id){ %>
                         <img src="https://drive.google.com/uc?export=view&id=<%= imagem[i].Image%>" alt="product 1" class="w-full">
-                                <%}%>
+                                <%break;}%>
                         <%}%>
                         <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center 
                         justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                            <a href="#"
+                            <a href="/api/v1/product_detail/<%= product.id%>"
                                 class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
                                 title="view product">
                                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -309,7 +309,7 @@
                         </div>
                     </div>
                     <div class="pt-4 pb-3 px-4">
-                        <a href="#">
+                        <a href="/api/v1/product_detail/<%= product.id%>">
                             <h4 id="product_name" class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
                                 <%= product.Product_name%></h4>
                         </a>
@@ -464,33 +464,34 @@
 
             $(document).on('click',".add_cart",function(){
                 $.ajax({
-                    url: "/api/v1/user/shop",
+                    url: "/api/v1/shop",
                     type: "post",
                     data: {id: $(this).attr("product_id")},
                     dataType: 'json',
                     success: function(data){
-                        $("#count_cart").empty();
-                        $("#count_cart").append(data.cart.length);
+                        if(data.statusCode === 200){
+                            $("#count_cart").empty();
+                            $("#count_cart").append(data.cart.length);
+                        }
+                        else if(data.statusCode === 403){
+                            window.location.href = "/api/v1/guest/login";
+                        }else if(data.statusCode === 500){
+                            alert("Hàng trong kho không đủ");
+                        }
                     }
                 })
             });
 
-            let page = 1;
-            let cateFilter = [];
+            var page = 1;
+            var cateFilter = [];
+            var sort = "0";
 
-            $(document).on('change',".filter_cate",function(){
-                if(this.checked){
-                    cateFilter.push($(this).attr("id"));
-                }
-                else{
-                    const index = cateFilter.indexOf($(this).attr("id"));
-                    cateFilter.splice(index, 1);
-                }
-                page = 1;
-                $.ajax({
+            $("#sort").change(function(){
+               sort = $("#sort option:selected").val();
+               $.ajax({
                         type: "post",
-                        url: "/api/v1/user/shop/paging",
-                        data: {page: page, cateFilter: cateFilter},
+                        url: "/api/v1/shop/paging",
+                        data: {page: page, cateFilter: cateFilter, sortProduct: sort},
                         dataType: "json",
                         success: function(resp){
                             $("#content_product").html("");
@@ -501,7 +502,7 @@
                                                                 +    "<div class='relative'>"
                         +"<img src='https://drive.google.com/uc?export=view&id="+resp.imagem[i].Image+"' alt='product 1' class='w-ful'>"
                         + "<div class='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition'>"
-                            +"<a href='#'"
+                            +"<a href='/api/v1/product_detail/"+ product.id +"'"
                                 +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
                                 +"title='view product'>"
                                 +"<i class='fa-solid fa-magnifying-glass'></i>"
@@ -514,7 +515,7 @@
                         +"</div>"
                     +"</div>"
                     +"<div class='pt-4 pb-3 px-4'>"
-                       + "<a href='#'>"
+                       + "<a href='/api/v1/product_detail/"+ product.id +"'>"
                             +"<h4 id='product_name' class='uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition'>"
                                + "" +product.Product_name+"</h4>"
                         +"</a>"
@@ -537,6 +538,84 @@
                         +"class='add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition'>Add"
                        + " to cart</button>"
                 +"</div>");
+                            break;
+                            }  
+                        }
+                    })
+                    count_page = resp.count;
+                    $("#select_page").html("");
+                    for(let i = 1; i < (count_page / 6) + 1; i++){
+                        if(i === page){
+                        $("#select_page").append("<button type='button' id='"+i+"' class='text-sm font-medium leading-none cursor-pointer text-indigo-700 dark:text-indigo-400 border-t border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }
+                        else{
+                            $("#select_page").append("<button type='button' id='"+i+"' class='number_page text-sm font-medium leading-none cursor-pointer text-gray-600 dark:text-gray-200 hover:text-indigo-700 dark:hover:text-indigo-400 border-t border-transparent hover:border-indigo-400 pt-3 mr-4 px-2'>"+i+"</button>");
+                        }       
+                    }
+                        }
+                    })
+            })
+
+            $(document).on('change',".filter_cate",function(){
+                if(this.checked){
+                    cateFilter.push($(this).attr("id"));
+                }
+                else{
+                    const index = cateFilter.indexOf($(this).attr("id"));
+                    cateFilter.splice(index, 1);
+                }
+                page = 1;
+                $.ajax({
+                        type: "post",
+                        url: "/api/v1/shop/paging",
+                        data: {page: page, cateFilter: cateFilter,sortProduct: sort},
+                        dataType: "json",
+                        success: function(resp){
+                            $("#content_product").html("");
+                            resp.data.forEach(function(product){
+                                for(let i = 0; i < resp.imagem.length; i++){
+                                    if(resp.imagem[i].Product_Id == product.id){
+                                $("#content_product").append("<div class='bg-white shadow rounded overflow-hidden group'>"
+                                                                +    "<div class='relative'>"
+                        +"<img src='https://drive.google.com/uc?export=view&id="+resp.imagem[i].Image+"' alt='product 1' class='w-ful'>"
+                        + "<div class='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition'>"
+                            +"<a href='/api/v1/product_detail/"+ product.id +"'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='view product'>"
+                                +"<i class='fa-solid fa-magnifying-glass'></i>"
+                           + "</a>"
+                            + "<a href='#'"
+                                +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
+                                +"title='add to wishlist'>"
+                                +"<i class='fa-solid fa-heart'></i>"
+                            +"</a>"
+                        +"</div>"
+                    +"</div>"
+                    +"<div class='pt-4 pb-3 px-4'>"
+                       + "<a href='/api/v1/product_detail/"+ product.id +"'>"
+                            +"<h4 id='product_name' class='uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition'>"
+                               + "" +product.Product_name+"</h4>"
+                        +"</a>"
+                        +"<div class='flex items-baseline mb-1 space-x-2'>"
+                            +"<p class='text-xl text-primary font-semibold'>$"+product.Price+"</p>"
+                            +"<p class='text-sm text-gray-400 line-through'>$55.90</p>"
+                        +"</div>"
+                        +"<div class='flex items-center'>"
+                           + "<div class='flex gap-1 text-sm text-yellow-400'>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                                +"<span><i class='fa-solid fa-star'></i></span>"
+                            +"</div>"
+                            +"<div class='text-xs text-gray-500 ml-3'>(150)</div>"
+                        +"</div>"
+                   + "</div>"
+                    +"<button type='button' product_id='"+product.id+"'"
+                        +"class='add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition'>Add"
+                       + " to cart</button>"
+                +"</div>");
+                            break;
                             }  
                         }
                     })
@@ -560,8 +639,8 @@
                         --page;
                         $.ajax({
                         type: "post",
-                        url: "/api/v1/user/shop/paging",
-                        data: {page: page, cateFilter: cateFilter},
+                        url: "/api/v1/shop/paging",
+                        data: {page: page, cateFilter: cateFilter,sortProduct: sort},
                         dataType: "json",
                         success: function(resp){
                             $("#content_product").html("");
@@ -572,7 +651,7 @@
                                                                 +    "<div class='relative'>"
                         +"<img src='https://drive.google.com/uc?export=view&id="+resp.imagem[i].Image+"' alt='product 1' class='w-ful'>"
                         + "<div class='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition'>"
-                            +"<a href='#'"
+                            +"<a href='/api/v1/product_detail/"+ product.id +"'"
                                 +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
                                 +"title='view product'>"
                                 +"<i class='fa-solid fa-magnifying-glass'></i>"
@@ -585,7 +664,7 @@
                         +"</div>"
                     +"</div>"
                     +"<div class='pt-4 pb-3 px-4'>"
-                       + "<a href='#'>"
+                       + "<a href='/api/v1/product_detail/"+ product.id +"'>"
                             +"<h4 id='product_name' class='uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition'>"
                                + "" +product.Product_name+"</h4>"
                         +"</a>"
@@ -608,6 +687,7 @@
                         +"class='add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition'>Add"
                        + " to cart</button>"
                 +"</div>");
+                            break;
                             }  
                         }
                     })
@@ -631,8 +711,8 @@
                         ++page;
                         $.ajax({
                         type: "post",
-                        url: "/api/v1/user/shop/paging",
-                        data: {page: page, cateFilter: cateFilter},
+                        url: "/api/v1/shop/paging",
+                        data: {page: page, cateFilter: cateFilter, sortProduct: sort},
                         dataType: "json",
                         success: function(resp){
                             $("#content_product").html("");
@@ -643,7 +723,7 @@
                                                                 +    "<div class='relative'>"
                         +"<img src='https://drive.google.com/uc?export=view&id="+resp.imagem[i].Image+"' alt='product 1' class='w-ful'>"
                         + "<div class='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition'>"
-                            +"<a href='#'"
+                            +"<a href='/api/v1/product_detail/"+ product.id +"'"
                                 +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
                                 +"title='view product'>"
                                 +"<i class='fa-solid fa-magnifying-glass'></i>"
@@ -656,7 +736,7 @@
                         +"</div>"
                     +"</div>"
                     +"<div class='pt-4 pb-3 px-4'>"
-                       + "<a href='#'>"
+                       + "<a href='/api/v1/product_detail/"+ product.id +"'>"
                             +"<h4 id='product_name' class='uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition'>"
                                + "" +product.Product_name+"</h4>"
                         +"</a>"
@@ -679,6 +759,7 @@
                         +"class='add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition'>Add"
                        + " to cart</button>"
                 +"</div>");
+                break;
                             }  
                         }
                     })
@@ -702,8 +783,8 @@
                         page = Number($(this).attr("id"));
                         $.ajax({
                         type: "post",
-                        url: "/api/v1/user/shop/paging",
-                        data: {page: page, cateFilter: cateFilter},
+                        url: "/api/v1/shop/paging",
+                        data: {page: page, cateFilter: cateFilter, sortProduct: sort},
                         dataType: "json",
                         success: function(resp){
                             $("#content_product").html("");
@@ -714,7 +795,7 @@
                                                                 +    "<div class='relative'>"
                         +"<img src='https://drive.google.com/uc?export=view&id="+resp.imagem[i].Image+"' alt='product 1' class='w-ful'>"
                         + "<div class='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition'>"
-                            +"<a href='#'"
+                            +"<a href='/api/v1/product_detail/"+ product.id +"'"
                                 +"class='text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition'"
                                 +"title='view product'>"
                                 +"<i class='fa-solid fa-magnifying-glass'></i>"
@@ -727,7 +808,7 @@
                         +"</div>"
                     +"</div>"
                     +"<div class='pt-4 pb-3 px-4'>"
-                       + "<a href='#'>"
+                       + "<a href='/api/v1/product_detail/"+ product.id +"'>"
                             +"<h4 id='product_name' class='uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition'>"
                                + "" +product.Product_name+"</h4>"
                         +"</a>"
@@ -750,6 +831,7 @@
                         +"class='add_cart block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition'>Add"
                        + " to cart</button>"
                 +"</div>");
+                break;
                             }  
                         }
                     })
@@ -767,9 +849,11 @@
                         }
                     })
             })
-    
             $(document).on('focusout',".search", function(){
-                $("#result_content").html("");
+                setTimeout(function ()
+                {
+                    $("#result_content").html("");
+                }, 101);
             })
 
 
@@ -778,8 +862,9 @@
                 $("#result_content").html("");
                 }
                 else{
+                    $("#result_content").html("");
                 $.ajax({
-                    url: "/api/v1/user/shop/search",
+                    url: "/api/v1/shop/search",
                     type: "post",
                     data: {data: $(this).val()},
                     dataType: "json",
@@ -787,15 +872,14 @@
                         resp.data.forEach(function(product){
                             for(let i = 0; i < resp.imagem.length; i++){
                                     if(resp.imagem[i].Product_Id == product.id){
-                        $("#result_content").append("<div class='absolute mt-2 w-full max-w-xl overflow-hidden rounded-md bg-white'>" 
-                                                        +"<div class='cursor-pointer py-2 px-3 hover:bg-slate-100 flex gap-x-2'>"
-                                                       + "<img class='w-10 h-10 'src='https://drive.google.com/uc?export=view&id="+ resp.imagem[i].Image +"' alt='Product'>"  
+                        $("#result_content").append("<a href='/api/v1/product_detail/"+ product.id +"' class='cursor-pointer py-2 px-3 hover:bg-slate-100 flex gap-x-2'>"
+                                                       + "<img class='w-10 h-10' src='https://drive.google.com/uc?export=view&id="+ resp.imagem[i].Image +"' alt='Product'>"  
                                                        + "<div>"
                                                         +"<p class='text-sm font-medium text-gray-600'>"+ product.Product_name +"</p>"
                                                        + "<p class='text-sm text-gray-500'>$"+ product.Price +"</p>"
                                                             +"</div>"
-                                                       + "</div>"
-                                                  +  "</div>")
+                                                       + "</a>");
+                                                  break;
                                                        }
                                                     }
                                                 })                        
@@ -811,32 +895,30 @@
                 }
                 else{
                 $.ajax({
-                    url: "/api/v1/user/shop/search",
+                    url: "/api/v1/shop/search",
                     type: "post",
                     data: {data: $(this).val()},
                     dataType: "json",
                     success: function(resp){
                         resp.data.forEach(function(product){
                             for(let i = 0; i < resp.imagem.length; i++){
-                                    if(resp.imagem[i].Product_Id == product.id){
-                        $("#result_content").append("<div class='absolute mt-2 w-full max-w-xl overflow-hidden rounded-md bg-white'>" 
-                                                        +"<div class='cursor-pointer py-2 px-3 hover:bg-slate-100 flex gap-x-2'>"
+                                   if(resp.imagem[i].Product_Id == product.id){
+                        $("#result_content").append("<a href='/api/v1/product_detail/"+ product.id +"' class='cursor-pointer py-2 px-3 hover:bg-slate-100 flex gap-x-2'>"
                                                        + "<img class='w-10 h-10 'src='https://drive.google.com/uc?export=view&id="+ resp.imagem[i].Image +"' alt='Product'>"  
                                                        + "<div>"
                                                         +"<p class='text-sm font-medium text-gray-600'>"+ product.Product_name +"</p>"
                                                        + "<p class='text-sm text-gray-500'>$"+ product.Price +"</p>"
                                                             +"</div>"
-                                                       + "</div>"
-                                                  +  "</div>")
+                                                       + "</a>");
+                                                  break;
                                                        }
-                                                    }
+                                                 }
                                                 })                        
                     }
                 })
             }
-            })
-    
-        })
+            });
+       })
 
     </script>
 </body>

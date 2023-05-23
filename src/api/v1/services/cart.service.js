@@ -26,7 +26,18 @@ module.exports = {
         const carts = await cartModel.findOne({User_Id: userid, isDeleted: false});
         return await cartitemModel.findOneAndUpdate({Cart_id: carts.id, Product_id: productid}, {$inc: {"Quantity":1}, $set: {Price: price}},{upsert: true, new: true});
     },
-    getItembyCartId: async (cartId) => {
+    getItembyCartId: async (cartId) => {           // lấy tất cả các sản phẩm trong giỏ hàng theo cartID
         return await cartitemModel.find({Cart_id: cartId});
+    },
+    addCartDetailProduct: async (userid, productid, price, quantity) => { // thêm 1 sản phẩm vào giỏ hàng bao gồm cả Quantity
+        const cart = await cartModel.findOne({User_Id: userid, isDeleted: false});
+        if(!cart){
+            await cartModel.create({User_Id: userid, Create_at: new Date(), Update_at: new Date()});
+        }
+        const carts = await cartModel.findOne({User_Id: userid, isDeleted: false});
+        return await cartitemModel.findOneAndUpdate({Cart_id: carts.id, Product_id: productid}, {$inc: {"Quantity":quantity}, $set: {Price: price}},{upsert: true, new: true});
+    },
+    getCartItemByProductId: async (id) => {
+        return await cartitemModel.findOne({Product_id: id});
     }
 }
