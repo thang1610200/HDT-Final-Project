@@ -1,0 +1,114 @@
+24-05-2023	00:36:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	42:36:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	38:37:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	48:38:13==============/api/v1/user/shop====GET====NotFoundError: This route does not exist
+24-05-2023	48:38:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	59:38:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	54:40:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	05:45:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	25:47:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	49:51:13==============/api/v1/user/cart====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\cart.ejs:86
+    84|             <div id="total" class="flex font-semibold justify-between py-6 text-sm uppercase">
+    85|               <span>Total cost</span>
+ >> 86|               <%var sum = 0; data.forEach(function(cart){sum = sum + Number(product.cartdetail.Price) * Number(product.cartdetail.Quantity) })%>
+    87|               <span>$ <%= sum%></span>
+    88|             </div>
+    89|             <button id="checkout" class="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">Checkout</button>
+
+data is not defined
+24-05-2023	49:51:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	30:52:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	37:52:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	36:59:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	49:00:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	02:02:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	13:08:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	53:08:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	58:08:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	37:16:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	44:18:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	54:18:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	20:19:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	10:20:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	17:20:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	33:20:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	53:20:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	32:22:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	39:22:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	43:23:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	52:23:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	18:24:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	55:41:14==============/api/v1/user/checkout====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\checkout.ejs:80
+    78|                 id="FirstName"
+    79|                 class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+ >> 80|                 value="<%= user.fullname%>"
+    81|                 disabled
+    82|               />
+    83|             </div>
+
+user is not defined
+24-05-2023	55:41:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	09:42:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	29:42:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	36:42:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	41:42:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	17:47:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	21:47:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	42:47:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	06:50:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	59:07:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	00:08:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	03:09:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	45:10:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	22:11:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	31:26:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	38:27:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	17:30:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	58:30:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	34:58:18==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	17:00:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	05:02:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	01:15:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	48:15:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	44:16:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	51:16:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	10:17:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	12:17:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	32:17:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	47:28:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	51:28:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	52:28:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	24:29:20==============/api/v1/user/checkout====GET====Error: Could not find matching close tag for "<%=".
+24-05-2023	24:29:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	28:29:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	45:29:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	48:29:20==============/api/v1/user/checkout====GET====Error: Could not find matching close tag for "<%=".
+24-05-2023	48:29:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	08:31:20==============/api/v1/user/checkout====GET====Error: Could not find matching close tag for "<%=".
+24-05-2023	08:31:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	06:32:20==============/api/v1/user/checkout====GET====Error: Could not find matching close tag for "<%=".
+24-05-2023	06:32:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	07:35:20==============/api/v1/user/checkout====GET====Error: Could not find matching close tag for "<%=".
+24-05-2023	07:35:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	23:35:20==============/api/v1/user/checkout====GET====SyntaxError: Unexpected token ')' in C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\checkout.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+24-05-2023	23:35:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	07:36:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	13:36:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	16:36:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	11:37:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	23:37:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	39:37:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	50:37:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	01:38:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	13:38:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	33:39:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	22:41:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	30:41:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	01:42:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	19:42:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	45:42:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+24-05-2023	49:42:20==============/favicon.ico====GET====NotFoundError: This route does not exist

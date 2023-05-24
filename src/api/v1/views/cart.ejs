@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      #summary {
+        background-color: #f6f6f6;
+      }
+    </style>
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+  
+  <body class="bg-gray-100">
+    <div class="container mx-auto mt-10">
+      <div class="flex shadow-md my-10">
+        <div class="w-3/4 bg-white px-10 py-10">
+          <div id="message_add"></div>
+          <div class="flex justify-between border-b pb-8">
+            <h1 class="font-semibold text-2xl">Shopping Cart</h1>
+            <h2 class="font-semibold text-2xl"><%= cart.length%> Items</h2>
+          </div>
+          <div class="flex mt-10 mb-5">
+            <h3 class="font-semibold text-gray-600 text-xs uppercase w-2/5">Product Details</h3>
+            <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5">Quantity</h3>
+            <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5">Price</h3>
+            <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5">Total</h3>
+          </div>
+          <div id="product_load">
+         <%  cart.forEach(function(product){ %>
+          <div class="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
+            <div class="flex w-2/5"> <!-- product -->
+              <div class="w-20">
+                <img class="h-24" src="https://drive.google.com/uc?export=view&id=<%= product.image_product.Image%>" alt="">
+              </div>
+              <div class="flex flex-col justify-between ml-4 flex-grow">
+                <span class="font-bold text-sm"><%= product.productdetail.Product_name%></span>
+                <span class="text-red-500 text-xs"><%= product.cate_detail.Category_name%></span>
+                <a product_id="<%= product.product_id%>" class="remove_product font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</a>
+              </div>
+            </div>
+            <div class="flex justify-center w-1/5">
+              <div class="mt-4 custom-number-input h-10 w-32">
+                <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
+                    <button product_id="<%= product.product_id%>" class="decrement bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
+                      <span class="m-auto text-2xl font-thin">−</span>
+                    </button>
+                    <input type="number" readonly class="product_number focus:outline-none text-center w-full font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700  outline-none" name="custom-input-number" value="<%= product.cartdetail.Quantity%>"></input>
+                  <button product_id="<%= product.product_id%>" class="increment bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
+                    <span class="m-auto text-2xl font-thin">+</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <span class="text-center w-1/5 font-semibold text-sm">$<%= product.cartdetail.Price%></span>
+            <span class="text-center w-1/5 font-semibold text-sm">$<%= Number(product.cartdetail.Price) * Number(product.cartdetail.Quantity)%></span>
+          </div>
+          <%})%>
+          </div>
+  
+          <a href="/api/v1/shop" class="flex font-semibold text-indigo-600 text-sm mt-10">
+        
+            <svg class="fill-current mr-2 text-indigo-600 w-4" viewBox="0 0 448 512"><path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z"/></svg>
+            Continue Shopping
+          </a>
+        </div>
+  
+        <div id="summary" class="w-1/4 px-8 py-10">
+          <h1 class="font-semibold text-2xl border-b pb-8">Order Summary</h1>
+          <!-- <div>
+            <label class="font-medium inline-block mb-3 text-sm uppercase">Shipping</label>
+            <select class="block p-2 text-gray-600 w-full text-sm">
+              <option>Standard shipping - $10.00</option>
+            </select>
+          </div> -->
+          <div class="py-10">
+            <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
+            <input type="text" id="promo" placeholder="Enter your code" class="p-2 text-sm w-full">
+            <div id="message_promo"></div>
+          </div>
+          <button id="apply_discount" class="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">Apply</button>
+          <div class="border-t mt-8">
+            <div id="total" class="flex font-semibold justify-between py-6 text-sm uppercase">
+              <span>Total payment</span>
+              <%var sum = 0; cart.forEach(function(product){sum = sum + Number(product.cartdetail.Price) * Number(product.cartdetail.Quantity) })%>
+              <span>$ <%= sum%></span>
+            </div>
+            <button id="checkout" class="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">Checkout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      $(document).on('click',".remove_product",function(){
+            $.ajax({
+              url: "/api/v1/user/remove_product",
+              type: "post",
+              data: {id: $(this).attr("product_id")},
+              dataType: 'json',
+              success: function(resp){
+                $("#product_load").html("");
+                resp.data.forEach(function(product){
+            $("#product_load").append("<div class='flex items-center hover:bg-gray-100 -mx-8 px-6 py-5'>"
+                                                 +"<div class='flex w-2/5'>"
+                                                   + "<div class='w-20'>"
+                                       + "<img class='h-24' src='https://drive.google.com/uc?export=view&id="+product.image_product.Image+"'>"
+                                           +"</div>"
+                                        +"<div class='flex flex-col justify-between ml-4 flex-grow'>"
+                                            +"<span class='font-bold text-sm'>"+ product.productdetail.Product_name+"</span>"
+                                      +"<span class='text-red-500 text-xs'>"+ product.cate_detail.Category_name+"</span>"
+                                        +"<a product_id='"+product.product_id+"' class='remove_product font-semibold hover:text-red-500 text-gray-500 text-xs'>Remove</a>"
+                                            +"</div>"
+                                              + "</div>"
+                                     + "<div class='flex justify-center w-1/5'>"
+                                     + "<div class='mt-4 custom-number-input h-10 w-32'>"
+                                           + "<div class='flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1'>"
+                                              +  "<button product_id='"+product.product_id+"' class='decrement bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none'>"
+                                                +  "<span class='m-auto text-2xl font-thin'>−</span>"
+                                               + "</button>"
+                                               + "<input type='number' readonly class='product_number focus:outline-none text-center w-full font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700  outline-none' name='custom-input-number' value='"+product.cartdetail.Quantity+"'></input>"
+                                             + "<button  product_id='"+product.product_id+"' class='increment bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer'>"
+                                              +  "<span class='m-auto text-2xl font-thin'>+</span>"
+                                             + "</button>"
+                                           + "</div>"
+                                        +  "</div>"
+                                      +"</div>"
+                                    + "<span class='text-center w-1/5 font-semibold text-sm'>$"+ Number(product.cartdetail.Price) +"</span>"
+                                    + "<span class='text-center w-1/5 font-semibold text-sm'>$"+Number(product.cartdetail.Price) * Number(product.cartdetail.Quantity)+"</span>"
+                                    +"</div>");
+                                        });
+
+                    $("#total").html("");
+                    $("#total").append("<span class='font-semibold text-sm uppercase'>Total Payment</span>"
+                            +"<span class='font-semibold text-sm'>$"+ resp.sum +"</span>")
+              }
+            })
+      });
+
+      $(document).on('click','#checkout',function(){
+          $.ajax({
+            url: "/api/v1/user/cart/checkout",
+            type: "post",
+            data: {code: $("#promo").val()},
+            dataType: "json",
+            success: function(data){
+              if(data.statusCode === 200){
+                window.location.href = "/api/v1/user/checkout"
+              }
+            }
+          })
+      })
+
+        $(document).on("click","#apply_discount",function(){
+            $.ajax({
+              url: "/api/v1/user/discount",
+              type: "post",
+              data: {code: $("#promo").val()},
+              dataType: 'json',
+              success: function(resp){
+                $("#message_promo").empty();
+                  if(resp.statusCode === 400){
+                    $("#message_promo").append("<span class='text-sm text-red-600'> Promo code does not exist. </span>");
+                    $("#total").html("");
+                    $("#total").append("<span class='font-semibold text-sm uppercase'>Total Payment</span>"
+                            +"<span class='font-semibold text-sm'>$"+ resp.sum +"</span>")
+                  }
+                  else if(resp.statusCode === 201){
+                    $("#message_promo").append("<span class='text-sm text-red-600'> Promo code has expired. </span>");
+                    $("#total").html("");
+                    $("#total").append("<span class='font-semibold text-sm uppercase'>Total Payment</span>"
+                            +"<span class='font-semibold text-sm'>$"+ resp.sum +"</span>")
+                  }
+                  else if(resp.statusCode === 200){
+                    $("#total").html("");
+                    $("#total").append("<span class='font-semibold text-sm uppercase'>Total Payment</span>"
+                            +"<span class='font-semibold text-sm'>$"+ resp.sum +"</span>")
+                  }
+              }
+            })
+        })
+
+        function closeAlert(event){
+          let element = event.target;
+          while(element.nodeName !== "BUTTON"){
+            element = element.parentNode;
+          }
+          element.parentNode.parentNode.removeChild(element.parentNode);
+        }
+
+  $(document).on("click",".increment", function(){
+    $.ajax({
+        url: "/api/v1/user/cart",
+        type: "post",
+        data: {id: $(this).attr("product_id"), value: $(this).prevAll().get(0).value},
+        dataType: "json",
+        success: function(resp){
+            $("#product_load").empty();
+            resp.data.forEach(function(product){
+            $("#product_load").append("<div class='flex items-center hover:bg-gray-100 -mx-8 px-6 py-5'>"
+                                                 +"<div class='flex w-2/5'>"
+                                                   + "<div class='w-20'>"
+                                       + "<img class='h-24' src='https://drive.google.com/uc?export=view&id="+product.image_product.Image+"'>"
+                                           +"</div>"
+                                        +"<div class='flex flex-col justify-between ml-4 flex-grow'>"
+                                            +"<span class='font-bold text-sm'>"+ product.productdetail.Product_name+"</span>"
+                                      +"<span class='text-red-500 text-xs'>"+ product.cate_detail.Category_name+"</span>"
+                                        +"<a product_id='"+product.product_id+"' class='remove_product font-semibold hover:text-red-500 text-gray-500 text-xs'>Remove</a>"
+                                            +"</div>"
+                                              + "</div>"
+                                     + "<div class='flex justify-center w-1/5'>"
+                                     + "<div class='mt-4 custom-number-input h-10 w-32'>"
+                                           + "<div class='flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1'>"
+                                              +  "<button product_id='"+product.product_id+"' class='decrement bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none'>"
+                                                +  "<span class='m-auto text-2xl font-thin'>−</span>"
+                                               + "</button>"
+                                               + "<input type='number' readonly class='product_number focus:outline-none text-center w-full font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700  outline-none' name='custom-input-number' value='"+product.cartdetail.Quantity+"'></input>"
+                                             + "<button  product_id='"+product.product_id+"' class='increment bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer'>"
+                                              +  "<span class='m-auto text-2xl font-thin'>+</span>"
+                                             + "</button>"
+                                           + "</div>"
+                                        +  "</div>"
+                                      +"</div>"
+                                    + "<span class='text-center w-1/5 font-semibold text-sm'>$"+ Number(product.cartdetail.Price) +"</span>"
+                                    + "<span class='text-center w-1/5 font-semibold text-sm'>$"+Number(product.cartdetail.Price) * Number(product.cartdetail.Quantity)+"</span>"
+                                    +"</div>");
+                                        });
+
+                    $("#total").html("");
+                    $("#total").append("<span class='font-semibold text-sm uppercase'>Total Payment</span>"
+                            +"<span class='font-semibold text-sm'>$"+ resp.sum +"</span>")
+        }
+    })
+  })
+
+  $(document).on("click",".decrement", function(){
+    $.ajax({
+        url: "/api/v1/user/cart",
+        type: "post",
+        data: {id: $(this).attr("product_id"), value: Number($(this).nextAll().get(0).value) - 2},
+        dataType: "json",
+        success: function(resp){
+            $("#product_load").empty();
+            resp.data.forEach(function(product){
+            $("#product_load").append("<div class='flex items-center hover:bg-gray-100 -mx-8 px-6 py-5'>"
+                                                 +"<div class='flex w-2/5'>"
+                                                   + "<div class='w-20'>"
+                                       + "<img class='h-24' src='https://drive.google.com/uc?export=view&id="+product.image_product.Image+"'>"
+                                           +"</div>"
+                                        +"<div class='flex flex-col justify-between ml-4 flex-grow'>"
+                                            +"<span class='font-bold text-sm'>"+ product.productdetail.Product_name+"</span>"
+                                      +"<span class='text-red-500 text-xs'>"+ product.cate_detail.Category_name+"</span>"
+                                        +"<a product_id='"+product.product_id+"' class='remove_product font-semibold hover:text-red-500 text-gray-500 text-xs'>Remove</a>"
+                                            +"</div>"
+                                              + "</div>"
+                                     + "<div class='flex justify-center w-1/5'>"
+                                     + "<div class='mt-4 custom-number-input h-10 w-32'>"
+                                           + "<div class='flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1'>"
+                                              +  "<button product_id='"+product.product_id+"' class='decrement bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none'>"
+                                                +  "<span class='m-auto text-2xl font-thin'>−</span>"
+                                               + "</button>"
+                                               + "<input type='number' readonly class='product_number focus:outline-none text-center w-full font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700  outline-none' name='custom-input-number' value='"+product.cartdetail.Quantity+"'></input>"
+                                             + "<button  product_id='"+product.product_id+"' class='increment bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer'>"
+                                              +  "<span class='m-auto text-2xl font-thin'>+</span>"
+                                             + "</button>"
+                                           + "</div>"
+                                        +  "</div>"
+                                      +"</div>"
+                                    + "<span class='text-center w-1/5 font-semibold text-sm'>$"+ Number(product.cartdetail.Price) +"</span>"
+                                    + "<span class='text-center w-1/5 font-semibold text-sm'>$"+Number(product.cartdetail.Price) * Number(product.cartdetail.Quantity)+"</span>"
+                                    +"</div>");
+                                        });
+
+                                        $("#total").html("");
+                    $("#total").append("<span class='font-semibold text-sm uppercase'>Total Payment</span>"
+                            +"<span class='font-semibold text-sm'>$"+ resp.sum +"</span>")
+        }
+    })
+  })
+    </script>
+  </body>
+</html>
+  

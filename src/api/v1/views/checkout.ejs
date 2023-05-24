@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1 class="sr-only">Checkout</h1>
+    <section>
+    <div class="mx-auto grid max-w-screen-2xl grid-cols-1 md:grid-cols-2">
+      <div class="bg-gray-50 py-12 md:py-24">
+        <div class="mx-auto max-w-lg space-y-8 px-4 lg:px-8">
+          <div class="flex items-center gap-4">
+            <span class="h-10 w-10 rounded-full bg-blue-700"></span>
+  
+            <h2 class="font-medium text-gray-900">Checkout</h2>
+          </div>
+  
+          <div>
+            <p class="text-2xl font-medium tracking-tight text-gray-900">
+              $ <%= sum%>
+            </p>
+  
+            <p class="mt-1 text-sm text-gray-600">For the purchase of</p>
+          </div>
+  
+          <div>
+            <div class="flow-root">
+              <ul class="-my-4 divide-y divide-gray-100">
+                <% product_cart.forEach(function(product){%>
+                <li class="flex items-center gap-4 py-4">
+                  <img
+                    src="https://drive.google.com/uc?export=view&id=<%= product.image_product.Image%>"
+                    alt=""
+                    class="h-16 w-16 rounded object-cover"
+                  />
+  
+                  <div>
+                    <h3 class="text-sm text-gray-900"><%= product.productdetail.Product_name%></h3>
+  
+                    <dl class="mt-0.5 space-y-px text-[10px] text-gray-600">
+                      <div>
+                        <dt class="inline">Category: </dt>
+                        <dd class="inline"><%= product.cate_detail.Category_name%></dd>
+                      </div>
+                    </dl>
+                  </div>
+                </li>
+                <%})%>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="bg-white py-12 md:py-24">
+        <div class="mx-auto max-w-lg px-4 lg:px-8">
+          <form class="grid grid-cols-6 gap-4" action="/customer/checkout" method="post">
+            <div class="col-span-6">
+              <label for="Email" class="block text-xs font-medium text-gray-700">
+                Fullname
+              </label>
+  
+              <input
+                type="text"
+                id="fullname"
+                class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                value=""
+                disabled
+              />
+            </div>
+  
+            <div class="col-span-6">
+              <label for="Email" class="block text-xs font-medium text-gray-700">
+                Email
+              </label>
+  
+              <input
+                type="email"
+                id="Email"
+                class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                value=""
+                disabled
+              />
+            </div>
+  
+            <div class="col-span-6">
+              <label for="Phone" class="block text-xs font-medium text-gray-700">
+                Phone
+              </label>
+  
+              <input
+                type="tel"
+                id="Phone"
+                class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                value=""
+                disabled
+              />
+            </div>
+  
+            <div class="col-span-6">
+              <label for="Address" class="block text-xs font-medium text-gray-700">
+                Address
+              </label>
+  
+              <input
+                type="text"
+                name="address"
+                id="address"
+                class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+              />
+              <div id="error_notice"></div>
+            
+            </div>
+            <div class="col-span-6">
+              <button type="button"
+                id="pay_click"
+                class="block w-full rounded-md bg-black p-2.5 text-sm text-white transition hover:shadow-lg"
+              >
+                Pay Now
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+      <!-- footer -->
+      <footer class="bg-white pt-16 pb-12 border-t border-gray-100">
+        <div class="container grid grid-cols-3">
+            <div class="col-span-1 space-y-8">
+                <img src="/static/images/logo.svg" alt="logo" class="w-30">
+                <div class="mr-2">
+                    <p class="text-gray-500">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, hic?
+                    </p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-gray-500"><i
+                            class="fa-brands fa-facebook-square"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500"><i
+                            class="fa-brands fa-instagram-square"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500"><i
+                            class="fa-brands fa-twitter-square"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500">
+                        <i class="fa-brands fa-github-square"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-span-2 grid grid-cols-2 gap-8">
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Solutions</h3>
+                        <div class="mt-4 space-y-4">
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Marketing</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Analitycs</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Commerce</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Insights</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Support</h3>
+                        <div class="mt-4 space-y-4">
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Pricing</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Documentation</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Guides</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">API Status</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Solutions</h3>
+                        <div class="mt-4 space-y-4">
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Marketing</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Analitycs</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Commerce</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Insights</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Support</h3>
+                        <div class="mt-4 space-y-4">
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Pricing</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Documentation</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Guides</a>
+                            <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">API Status</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- ./footer -->
+
+    <!-- copyright -->
+    <div class="bg-gray-800 py-4">
+        <div class="container flex items-center justify-between">
+            <p class="text-white">&copy; TailCommerce - All Right Reserved</p>
+            <div>
+                <img src="/static/images/methods.png" alt="methods" class="h-5">
+            </div>
+        </div>
+    </div>
+    <!-- ./copyright -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+      $("#pay_click").click(function(){
+          $.ajax({
+            url: "/customer/checkout",
+            type:"post",
+            data: {address: $("#address").val()},
+            dataType: "json",
+            success: function(data){
+                if(data.statusCode === 201){
+                  console.log(data);
+                $("#error_notice").empty();
+                $("#error_notice").append("<span class='text-sm text-red-600'>"+ data.errors.errors[0].msg +"</span>");
+                }
+                else if(data.statusCode === 200){
+                   location.href = data.vnpUrl;
+                }
+            }
+          })
+      })
+  </script>
+</body>
+</html>
