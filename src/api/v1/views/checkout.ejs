@@ -5,9 +5,66 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
+    <link rel="shortcut icon" href="/static/images/favicon/favicon.ico" type="image/x-icon">
+
     <link rel="stylesheet" href="/static/css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+  <header class="py-4 shadow-sm bg-white">
+    <div class="container flex items-center justify-between">
+        <a href="/api/v1">
+            <img src="/static/images/logo.svg" alt="Logo" class="w-32">
+        </a>
+
+        <div class="w-full max-w-xl">
+            <div class="relative flex">
+            <span class="absolute left-4 top-3 text-lg text-gray-400">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input type="text" name="search" id="search"
+                class="search w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
+                placeholder="search">
+            <button
+                class="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
+            </div>
+            <div class='absolute mt-2 w-full max-w-xl overflow-hidden rounded-md bg-white' id="result_content"> 
+            </div>  
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                <div class="text-2xl">
+                    <i class="fa-regular fa-heart"></i>
+                </div>
+                <div class="text-xs leading-3">Wishlist</div>
+                <!-- <div
+                    class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                    8</div> -->
+            </a>
+            <a href="/api/v1/user/cart" class="text-center text-gray-700 hover:text-primary transition relative">
+                <div class="text-2xl">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </div>
+                <div class="text-xs leading-3">Cart</div>
+                <div id="count_cart"
+                    class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                   2 </div>
+            </a>
+            <a href="/api/v1/user/profile" class="text-center text-gray-700 hover:text-primary transition relative">
+                <div class="text-2xl">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <div class="text-xs leading-3">Account</div>
+            </a>
+        </div>
+    </div>
+</header>
+<!-- ./header -->
     <h1 class="sr-only">Checkout</h1>
     <section>
     <div class="mx-auto grid max-w-screen-2xl grid-cols-1 md:grid-cols-2">
@@ -68,7 +125,7 @@
                 type="text"
                 id="fullname"
                 class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-                value=""
+                value="<%= user.fullname%>"
                 disabled
               />
             </div>
@@ -82,7 +139,7 @@
                 type="email"
                 id="Email"
                 class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-                value=""
+                value="<%= user.email%>"
                 disabled
               />
             </div>
@@ -96,7 +153,7 @@
                 type="tel"
                 id="Phone"
                 class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-                value=""
+                value="<%= user.phone%>"
                 disabled
               />
             </div>
@@ -111,8 +168,9 @@
                 name="address"
                 id="address"
                 class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                value="<%= user.address%>"
+                disabled
               />
-              <div id="error_notice"></div>
             
             </div>
             <div class="col-span-6">
@@ -213,19 +271,12 @@
   <script>
       $("#pay_click").click(function(){
           $.ajax({
-            url: "/customer/checkout",
+            url: "/api/v1/user/checkout",
             type:"post",
-            data: {address: $("#address").val()},
-            dataType: "json",
             success: function(data){
-                if(data.statusCode === 201){
-                  console.log(data);
-                $("#error_notice").empty();
-                $("#error_notice").append("<span class='text-sm text-red-600'>"+ data.errors.errors[0].msg +"</span>");
-                }
-                else if(data.statusCode === 200){
-                   location.href = data.vnpUrl;
-                }
+              if(data.statusCode === 200){
+                location.href = data.vnpUrl;
+              }
             }
           })
       })

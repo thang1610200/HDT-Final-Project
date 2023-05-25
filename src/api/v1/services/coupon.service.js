@@ -23,8 +23,8 @@ module.exports = {
     getItemByUserIDAndCode: async (userId, couponId) => {     // lấy thông tin trong bảng Coupon Item theo UserId và CouponID và isUsed
         return await couponItemModel.findOne({Coupon_id: couponId, User_id: userId, isUsed: true});
     },
-    addCouponItem: async (userId, couponId) => {  // cập nhật thông tin của bảng Coupon Item
-        return await couponItemModel.findOneAndUpdate({isUsed: false, User_id: userId}, {Coupon_id: couponId}, {upsert: true});
+    createCouponItem: async (Coupon_id, User_id) => {  // thêm dữ liệu vào bảng Coupon Item
+        return await couponItemModel.create({Coupon_id, User_id, isUsed: true});
     }
 
 }

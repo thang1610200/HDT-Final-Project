@@ -7,6 +7,7 @@ require("dotenv").config();
 const multer = require('multer');
 require("module-alias/register");
 const Author = require("@middleware/Author.middleware");
+const CheckoutMiddle = require("@middleware/RedirectCheckout.middleware");
 const userService = require("@service/user.service");
 const cartService = require("@service/cart.service");
 const productService = require("@service/product.service");
@@ -17,6 +18,8 @@ const {sendMail} = require("@util/mail.js");
 const NewpassValidator = require("@validation/newpass.validation");
 const SetPassValidator = require("@validation/setpass.validation");
 const {client} = require("@common/Redis");
+const vnpayApi = require('@util/vnpay');
+const configVNP = require("@config/vnpay.config");
 const { validationResult } = require('express-validator');
 
 
@@ -166,21 +169,67 @@ router.get('/cart',async (req,res) => {
         product_cart.forEach(function(product){
             sum = sum + Number(product.cartdetail.Price) * Number(product.cartdetail.Quantity)
         });
+        var discount;
         if(coupon){
-            sum = (sum * (100 - coupon.Value)) / 100;
+            const couponitem = await couponService.getItemByUserIDAndCode(req.user.id, coupon.id);
+            if(!couponitem){
+                discount = coupon.id;
+                sum = (sum * (100 - coupon.Value)) / 100;
+            }
         }
-        await orderService.createOrder(req.user.id, coupon, sum);
-        // const order = await orderService.getOrderByUserId(req.user.id);
-        // product_cart.forEach(async function(product){
-        //     await orderService.addItemOrder(order.id, product.productdetail.id, product.productdetail.Product_name, product.cartdetail.Quantity, product.cartdetail.Price);
-        // });
+        await orderService.createOrder(req.user.id, discount, sum);
         return res.json({statusCode: 200});
 })
 
-router.get("/checkout", async (req,res) => {
+router.get("/checkout", CheckoutMiddle.redirect_check ,async (req,res) => {
     const product_cart = await cartService.getAllProductByUserId(req.user.id);
     const order = await orderService.getOrderByUserId(req.user.id);
-    res.render("checkout",{product_cart: product_cart, sum: order.Total});
+    const user = await userService.getUserbyId(req.user.id);
+    res.render("checkout",{product_cart: product_cart, sum: order.Total, user: user});
+})
+    .post("/checkout", async (req,res) => {
+        const order = await orderService.getOrderByUserId(req.user.id);
+        vnpayApi.checkout(req,res,order);
 })
 
+router.get('/vnpay_return', async (req, res) => {
+    let vnp_Params = req.query;
+    let secureHash = vnp_Params['vnp_SecureHash'];
+    
+    delete vnp_Params['vnp_SecureHash'];
+    delete vnp_Params['vnp_SecureHashType'];
+
+    vnp_Params = vnpayApi.sortObject(vnp_Params);
+
+    let tmnCode = configVNP.vnp_TmnCode
+    let secretKey = configVNP.vnp_HashSecret;
+
+    let querystring = require('qs');
+    let signData = querystring.stringify(vnp_Params, { encode: false });
+    let crypto = require("crypto");     
+    let hmac = crypto.createHmac("sha512", secretKey);
+    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex"); 
+   // console.log(vnp_Params['vnp_ResponseCode']);    
+    if(secureHash === signed){
+        if(vnp_Params['vnp_ResponseCode'] === '24'){
+            return res.redirect("/api/v1/user/checkout");
+        }
+        if(vnp_Params['vnp_ResponseCode'] === '00'){
+            const order = await orderService.getOrderByUserId(req.user.id);
+            const product_cart = await cartService.getAllProductByUserId(req.user.id);
+            product_cart.forEach(async function(product){
+                await orderService.addItemOrder(order.id, product.productdetail.id, product.productdetail.Product_name, product.cartdetail.Quantity, product.cartdetail.Price);
+            });
+            await orderService.updateOrder(req.user.id,"Đang xử lý");
+            await cartService.updateCartDeleted(req.user.id);
+            if(order.Coupon_id){
+                await couponService.createCouponItem(order.Coupon_id,req.user.id);
+            }
+
+        }
+        res.render('payment_success', {code: vnp_Params['vnp_ResponseCode']})
+    } else{
+        res.render('payment_success', {code: '97'})
+    }
+});
 module.exports = router;

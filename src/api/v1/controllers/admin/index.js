@@ -6,6 +6,7 @@ const productService = require("@service/product.service");
 const categoryService = require("@service/category.service");
 const listimageService = require("@service/listimage.service");
 const couponService = require("@service/coupon.service");
+const orderService = require("@service/order.service");
 const drive = require("@util/drive");
 const {format} = require('date-fns');
 const router = express.Router();
@@ -147,6 +148,32 @@ router.get("/coupon", async (req,res) => {
     .post("/delete_coupon", async (req,res) => {
         await couponService.deleteCoupon(req.body.coupon_id_delete);
         res.redirect(req.baseUrl + '/coupon');
+})
+//====================Coupon
+
+//========================Order
+router.get("/order", async (req,res) => {
+    const order = await orderService.getInforOrders();
+    res.render("order",{order: order, format: format});
+})
+    .post("/order/browser", async (req,res) => {
+        const {id} = req.body; 
+        const order = await orderService.getInforOrdersByID(id);
+        res.json({data: order});
+})
+    .post("/order", async (req,res) => {
+        const {order_id_edit, start_date} = req.body;
+        await await orderService.updateDeliveryTimeOrder(order_id_edit, new Date(start_date));
+        res.redirect("/api/v1/admin/order");
+})
+
+router.get("/order_item/:orderId", async (req,res) => {
+    const orderId = req.params.orderId;
+    const order = await orderService.getOrderItemByOrderId(orderId);
+    if(order.length === 0){
+        return res.redirect("/api/v1/admin/order");
+    }
+    return res.render("order_item", {order: order, format: format});
 })
 
 

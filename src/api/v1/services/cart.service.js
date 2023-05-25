@@ -104,5 +104,8 @@ module.exports = {
     },
     removeProduct: async (cart_id, product_id) => {      // xóa sản phẩm trong giỏ hàng
         return await cartitemModel.findOneAndDelete({Cart_id: cart_id, Product_id: product_id},{rawResult: true});
+    },
+    updateCartDeleted: async (User_Id) => {  // Xóa giỏ hàng
+        return await cartModel.updateOne({User_Id, isDeleted: false},{isDeleted: true});
     }
 }
