@@ -9,10 +9,11 @@ const userService = require("@service/user.service");
 const Author = require("@middleware/Author.middleware");
 const router = express.Router();
 
+
 router.use("/guest",require("@controllers/guest"));
 router.use("/user",require("@controllers/user"));
 router.use("/admin",require("@controllers/admin"));
-//router.use("/test",require("@controllers/test"));
+router.use("/test",require("@controllers/test"));
 
 router.get("/",(req,res) => {
     res.render("homepage");
@@ -34,9 +35,9 @@ router.get("/shop", Author.publicURL ,async (req,res) => {
         const {id} = req.body;
         if(req.user !== null){
             const product = await productService.findOnebyId(id);
-            const cartP = await cartService.getCartItemByProductId(product.id);
+            const cartP = await cartService.getCartItemByProductId(product.id); 
             let count = !cartP ? 0 : cartP.Quantity;
-            if((Number(product.Quantity) - Number(count)) === 0){
+            if(Number(product.Quantity - product.Sold) <= Number(count)){
                 return res.json({statusCode: 500});
             }
             else{
@@ -81,9 +82,9 @@ router.get("/product_detail/:id", Author.publicURL, async (req,res,next) => {
         const {id, quantity} = req.body;
         if(req.user !== null){
             const product = await productService.findOnebyId(id);
-            const cartP = await cartService.getCartItemByProductId(product.id);
+            const cartP = await cartService.getCartItemByProductId(product.id); 
             let count = !cartP ? 0 : cartP.Quantity;
-            if((Number(product.Quantity) - Number(count)) < Number(quantity)){
+            if((Number(product.Quantity) - Number(product.Sold)) < (Number(quantity) + Number(count))){
                 return res.json({statusCode: 500});
             }
             else{

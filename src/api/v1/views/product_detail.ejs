@@ -297,28 +297,99 @@
 
     <!-- description -->
     <div class="container pb-16">
-        <h3 class="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Product details</h3>
-        <div class="w-3/5 pt-6">
-            <div class="text-gray-600">
-                <p><%= product[0].Description%></p>
-            </div>
+            <!-- Tabs -->
+            <ul id="tabs" class="inline-flex pt-2 px-1 w-full border-b">
+              <li class="bg-white px-4 text-gray-800 font-semibold py-2 rounded-t border-t border-r border-l -mb-px"><a id="default-tab" href="#first">Product details</a></li>
+              <li class="px-4 text-gray-800 font-semibold py-2 rounded-t"><a href="#second">Reviews</a></li>
+              <li class="px-4 text-gray-800 font-semibold py-2 rounded-t"><a href="#three">Feedbacks</a></li>
+            </ul>
+          
+            <!-- Tab Contents -->
+            <div id="tab-contents">
+              <div id="first" class="p-4">
+                <div class="w-3/5 pt-6">
+                    <div class="text-gray-600">
+                        <p><%= product[0].Description%></p>
+                    </div>
+                </div>
+              </div>
+              <div id="second" class="hidden p-4">
+                <div class="-my-10">
+                    <div class="flex text-sm text-gray-500 space-x-4">
+                      <div class="flex-none py-10">
+                        <img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80" alt="" class="w-10 h-10 bg-gray-100 rounded-full">
+                      </div>
+                      <div class="flex-1 py-10">
+                        <h3 class="font-medium text-gray-900">Emily Selman</h3>
+                        <p><time datetime="2021-07-16">July 16, 2021</time></p>
+              
+                        <div class="flex items-center mt-4">
+                          <!--
+                            Heroicon name: solid/star
+              
+                            Active: "text-yellow-400", Default: "text-gray-300"
+                          -->
+                          <svg class="text-yellow-400 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+              
+                          <!-- Heroicon name: solid/star -->
+                          <svg class="text-yellow-400 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+              
+                          <!-- Heroicon name: solid/star -->
+                          <svg class="text-yellow-400 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+              
+                          <!-- Heroicon name: solid/star -->
+                          <svg class="text-yellow-400 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+              
+                          <!-- Heroicon name: solid/star -->
+                          <svg class="text-yellow-400 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        </div>
+                        <p class="sr-only">5 out of 5 stars</p>
+              
+                        <div class="mt-4 prose prose-sm max-w-none text-gray-500">
+                          <p>This icon pack is just what I need for my latest project. There's an icon for just about anything I could ever need. Love the playful look!</p>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+              </div>
 
-            <table class="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
-                <tr>
-                    <th class="py-2 px-4 border border-gray-300 w-40 font-medium">Color</th>
-                    <th class="py-2 px-4 border border-gray-300 ">Blank, Brown, Red</th>
-                </tr>
-                <tr>
-                    <th class="py-2 px-4 border border-gray-300 w-40 font-medium">Material</th>
-                    <th class="py-2 px-4 border border-gray-300 ">Latex</th>
-                </tr>
-                <tr>
-                    <th class="py-2 px-4 border border-gray-300 w-40 font-medium">Weight</th>
-                    <th class="py-2 px-4 border border-gray-300 ">55kg</th>
-                </tr>
-            </table>
+              <div id="three" class="hidden p-4">
+                <div class="w-auto pt-6">
+                    <div class="text-gray-600">
+                        <div class="rating">
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" value="1" checked />
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" value="2"/>
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" value="3"/>
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" value="4"/>
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" value="5"/>
+                          </div>
+        <div>
+        <label for="comment" class="sr-only">Comment</label>
+        <div>
+        <textarea rows="5" name="comment" id="comment" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Add your comment..."></textarea>
         </div>
+        <div class="mt-2 flex justify-end">
+            <button type="button" id="post_review" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Post</button>
+          </div>
+        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        <!-- <h3 class="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Product details</h3> -->
     </div>
+
+    
     <!-- ./description -->
 
     <!-- related product -->
@@ -542,7 +613,11 @@
             });
 
     $(document).on('click',".add_cart",function(){
-                $.ajax({
+        if($("#quantity").val() === "0"){
+            alert("Hãy chọn số lượng sản phẩm");
+        }
+        else{
+            $.ajax({
                     url: "/api/v1/product_detail",
                     type: "post",
                     data: {id: $(this).attr("product_id"), quantity: $("#quantity").val()},
@@ -559,7 +634,48 @@
                         }
                     }
                 })
+        }
             });
+
+            let tabsContainer = document.querySelector("#tabs");
+
+            let tabTogglers = tabsContainer.querySelectorAll("#tabs a");
+
+           // console.log(tabTogglers);
+
+            tabTogglers.forEach(function(toggler) {
+            toggler.addEventListener("click", function(e) {
+                e.preventDefault();
+
+                let tabName = this.getAttribute("href");
+
+                let tabContents = document.querySelector("#tab-contents");
+
+                for (let i = 0; i < tabContents.children.length; i++) {
+                
+                tabTogglers[i].parentElement.classList.remove("border-t", "border-r", "border-l", "-mb-px", "bg-white");  tabContents.children[i].classList.remove("hidden");
+                if ("#" + tabContents.children[i].id === tabName) {
+                    continue;
+                }
+                tabContents.children[i].classList.add("hidden");
+                
+                }
+                e.target.parentElement.classList.add("border-t", "border-r", "border-l", "-mb-px", "bg-white");
+            });
+            });
+
+        $("#post_review").click(function(){
+            //console.log($("input[type='radio']:checked").val());
+            $.ajax({
+                url: "/api/v1/user/review",
+                type: "post",
+                data: {rating: $("input[type='radio']:checked").val(), content: $("#comment").val()},
+                dataType: "json",
+                success: function(resp){
+                    
+                }
+            })
+        })
     </script>
 </body>
 </html>

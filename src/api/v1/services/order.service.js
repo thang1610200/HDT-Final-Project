@@ -12,7 +12,7 @@ module.exports = {
         }
         else{
         if(!Coupon){
-            return await orderModel.findOneAndUpdate({User_id, isDeleted: false}, {Coupon_id: null});
+            return await orderModel.findOneAndUpdate({User_id, isDeleted: false}, {Coupon_id: null, Total});
         }
         return await orderModel.findOneAndUpdate({User_id, isDeleted: false}, {Coupon_id: Coupon , Total});
     }
@@ -130,7 +130,85 @@ module.exports = {
             },
             {
                 $match: {"image_product.Main_Image": true}
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'User_id',
+                    foreignField: 'id',
+                    as: 'userdetail'
+                }
+            },
+            {
+                $unwind: "$userdetail"
             }
         ]);
+    },
+    getAllOrderByUserId: async (UserId) => {  // lấy thông tin các đơn hàng theo UserID
+        return await orderModel.aggregate([
+            {
+                $match: {User_id: UserId}
+            },
+            {
+                $lookup: {
+                    from: "orderitems",
+                    localField: "id",
+                    foreignField: "Order_id",
+                    as: "orderitemdetail"
+                }
+            },
+            {
+                $unwind: "$orderitemdetail"
+            },
+            {
+                "$addFields": { "product_id": "$orderitemdetail.Product_id"}
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "product_id",
+                    foreignField: "id",
+                    as: "productdetail"
+                }
+            },{
+                $unwind: "$productdetail"
+            },
+            { $lookup:
+                {
+                  from: 'listimages',
+                  localField: 'product_id',
+                  foreignField: 'Product_Id',
+                  as: 'image_product'
+                }
+            },
+            {
+                $unwind: "$image_product"
+            },
+            {
+                $match: {"image_product.Main_Image": true}
+            },{
+                $group: {
+                    _id: "$id",
+                    infor: { $push: "$$ROOT" }
+                }
+            }
+        ]);
+    },
+    getDiscountofOrderByUserID: async (UserId) => {  // Lấy thông tin coupon và Order theo User id
+        return await orderModel.aggregate([
+            {
+                $lookup: {
+                    from: 'coupons',
+                    localField: 'Coupon_id',
+                    foreignField: 'id',
+                    as: 'coupondetail'
+                }
+            },{
+                $match: {User_id: UserId}
+            }
+        ])
+    },
+    CancelOrder: async (orderId) => {       // hủy đơn hàng
+        return await orderModel.updateOne({id: orderId},{Status: "Hủy"});
     }
 }

@@ -20,7 +20,7 @@
     <!-- header -->
     <header class="py-4 shadow-sm bg-white">
         <div class="container flex items-center justify-between">
-            <a href="/">
+            <a href="/api/v1">
                 <img src="/static/images/logo.svg" alt="Logo" class="w-32">
             </a>
 
@@ -36,7 +36,7 @@
                     class="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
                 </div>
                 <div class='absolute mt-2 w-full max-w-xl overflow-hidden rounded-md bg-white' id="result_content"> 
-                </div>     
+                </div> 
             </div>
 
             <div class="flex items-center space-x-4">
@@ -58,7 +58,7 @@
                         class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
                         <% if(typeof sum_cart !== 'undefined'){ %> <% if(sum_cart.length > 0){%><%= sum_cart[0].cartdetail.length%><%} else{%>0<%}%>  <%} else {%> 0 <%}%></div>
                 </a>
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                <a href="/api/v1/user/profile" class="text-center text-gray-700 hover:text-primary transition relative">
                     <div class="text-2xl">
                         <i class="fa-regular fa-user"></i>
                     </div>
@@ -129,135 +129,106 @@
         <span class="text-sm text-gray-400">
             <i class="fa-solid fa-chevron-right"></i>
         </span>
-        <p class="text-gray-600 font-medium">Profile</p>
+        <p class="text-gray-600 font-medium">Order history</p>
     </div>
     <!-- ./breadcrumb -->
 
-    <!-- wrapper -->
-    <div class="container grid grid-cols-12 items-start gap-6 pt-4 pb-16">
-
-        <!-- sidebar -->
-        <div class="col-span-3">
-            <div class="px-4 py-3 shadow flex items-center gap-4">
-                <div class="flex-shrink-0">
-                    <img src="https://drive.google.com/uc?export=view&id=<%= data.avatar%>" alt="profile"
-                        class="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover">
-                </div>
-                <div class="flex-grow">
-                    <p class="text-gray-600">Hello,</p>
-                    <h4 class="text-gray-800 font-medium"><%= data.fullname%></h4>
-                </div>
-            </div>
-
-            <div class="mt-6 bg-white shadow rounded p-4 divide-y divide-gray-200 space-y-4 text-gray-600">
-                <div class="space-y-1 pl-8">
-                    <a href="#" class="relative text-primary block font-medium capitalize transition">
-                        <span class="absolute -left-8 top-0 text-base">
-                            <i class="fa-regular fa-address-card"></i>
-                        </span>
-                        Manage account
-                    </a>
-                    <a href="/api/v1/user/profile" class="relative hover:text-primary block capitalize transition">
-                        Profile information
-                    </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
-                        Manage addresses
-                    </a>
-                    <a href="/api/v1/user/newpass" class="relative hover:text-primary block capitalize transition">
-                        Change password
-                    </a>
-                </div>
-
-                <div class="space-y-1 pl-8 pt-4">
-                    <a href="/api/v1/user/order_history" class="relative hover:text-primary block font-medium capitalize transition">
-                        <span class="absolute -left-8 top-0 text-base">
-                            <i class="fa-solid fa-box-archive"></i>
-                        </span>
-                        My order history
-                    </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
-                        My returns
-                    </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
-                        My Cancellations
-                    </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
-                        My reviews
-                    </a>
-                </div>
-
-                <div class="space-y-1 pl-8 pt-4">
-                    <a href="#" class="relative hover:text-primary block font-medium capitalize transition">
-                        <span class="absolute -left-8 top-0 text-base">
-                            <i class="fa-regular fa-credit-card"></i>
-                        </span>
-                        Payment methods
-                    </a>
-                    <a href="#" class="relative hover:text-primary block capitalize transition">
-                        voucher
-                    </a>
-                </div>
-
-                <div class="space-y-1 pl-8 pt-4">
-                    <a href="#" class="relative hover:text-primary block font-medium capitalize transition">
-                        <span class="absolute -left-8 top-0 text-base">
-                            <i class="fa-regular fa-heart"></i>
-                        </span>
-                        My wishlist
-                    </a>
-                </div>
-
-                <div class="space-y-1 pl-8 pt-4">
-                    <a href="/api/v1/guest/logout" class="relative hover:text-primary block font-medium capitalize transition">
-                        <span class="absolute -left-8 top-0 text-base">
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                        </span>
-                        Logout
-                    </a>
-                </div>
-
-            </div>
-        </div>
         <!-- ./sidebar -->
 
         <!-- info -->
-        <div class="col-span-9 shadow rounded px-6 pt-5 pb-7">
-            <h4 class="text-lg font-medium capitalize mb-4">
-                Change Password
-            </h4>
-            <div id="alert"></div>
-            <form method="" action="">
-            <div class="space-y-4">
-                <div class="grid grid-cols-1 gap-4">
-                    <div>
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="input-box">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 gap-4">
-                    <div>
-                        <label for="newpass">New Password</label>
-                        <input type="password" name="newpass" id="newpass" class="input-box">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 gap-4">
-                    <div>
-                        <label for="confirm-pass">Confirm Password</label>
-                        <input type="password" name="confirm-pass" id="confirm-pass" class="input-box">
-                    </div>
-                </div>
-            </div>
+    <!-- This example requires Tailwind CSS v2.0+ -->
+<div class="bg-white">
+    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:pb-24 lg:px-8">
+      <div class="max-w-xl">
+        <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">Order history</h1>
+      </div>
+  
+      <div class="mt-10">
+        <h2 class="sr-only">Recent orders</h2>
+  
+        <div class="space-y-20">
 
-            <div class="mt-4">
-                <button type="button" id="btn_change"
-                    class="py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium">save
-                    changes</button>
+          <div>
+            <h3 class="sr-only">Order placed on <time datetime="2021-01-22">January 22, 2021</time></h3>
+            <% order.forEach(function(orders){ %>
+            <div class="bg-gray-50 rounded-lg py-6 px-4 sm:px-6 sm:flex sm:items-center sm:justify-between sm:space-x-6 lg:space-x-8">
+              <dl class="divide-y divide-gray-200 space-y-6 text-sm text-gray-600 flex-auto sm:divide-y-0 sm:space-y-0 sm:grid sm:grid-cols-4 sm:gap-x-8 lg:w-1/2 lg:flex-none lg:gap-x-8">
+                <div class="flex justify-between sm:block">
+                  <dt class="font-medium text-gray-900">Date placed</dt>
+                  <dd class="sm:mt-1">
+                    <time datetime="2021-01-22"><%= `${format(new Date(orders.infor[0].Create_at), 'MMMM dd, yyyy')}`%></time>
+                  </dd>
+                </div>
+                <div class="flex justify-between pt-6 sm:block sm:pt-0">
+                  <dt class="font-medium text-gray-900">Order number</dt>
+                  <dd class="sm:mt-1"><%= orders.infor[0].id.slice(0,8).toUpperCase()%></dd>
+                </div>
+                <div class="flex justify-between pt-6 font-medium text-gray-900 sm:block sm:pt-0">
+                  <dt>Total amount</dt>
+                  <dd class="sm:mt-1">$<%= orders.infor[0].Total%></dd>
+                </div>
+                <div class="flex justify-between pt-6 font-medium text-gray-900 sm:block sm:pt-0">
+                    <dt>Coupon</dt>
+                    <% coupon.forEach(function(coupons){ %>
+                    <dd class="sm:mt-1"><% if(orders.infor[0].Coupon_id){ %>  <% if(orders.infor[0].Coupon_id === coupons.Coupon_id){ %> <%= coupons.coupondetail[0].Code%>  <%}%> <%}%></dd>
+                    <%})%>
+                </div>
+              </dl>
+              <button type="button" <% if(orders.infor[0].Status !== "Đang xử lý"){ %> disabled <%}%> order_id ="<%= orders.infor[0].id%>" class="cancel_order w-full flex items-center justify-center bg-white mt-6 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:mt-0">
+                Cancel
+              </button>
+              <a href="/api/v1/user/order_deatail/<%= orders.infor[0].id%>" class="w-full flex items-center justify-center bg-white mt-6 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:mt-0">
+                Order detail
+                <span class="sr-only">for order WU88191111</span>
+              </a>
             </div>
-        </form>
+  
+            <table class="mt-4 w-full text-gray-500 sm:mt-6">
+              <caption class="sr-only">
+                Products
+              </caption>
+              <thead class="sr-only text-sm text-gray-500 text-left sm:not-sr-only">
+                <tr>
+                  <th scope="col" class="sm:w-2/5 lg:w-1/3 pr-8 py-3 font-normal">Product</th>
+                  <th scope="col" class="hidden w-1/5 pr-8 py-3 font-normal sm:table-cell">Price</th>
+                  <th scope="col" class="hidden pr-8 py-3 font-normal sm:table-cell">Status</th>
+                  <th scope="col" class="w-0 py-3 font-normal text-right">Info</th>
+                </tr>
+              </thead>
+              <tbody class="border-b border-gray-200 divide-y divide-gray-200 text-sm sm:border-t">
+                <% orders.infor.forEach(function(data){ %>
+                <tr>
+                  <td class="py-6 pr-8">
+                    <div class="flex items-center">
+                      <img src="https://drive.google.com/uc?export=view&id=<%= data.image_product.Image%>" alt="Detail of mechanical pencil tip with machined black steel shaft and chrome lead tip." class="w-16 h-16 object-center object-cover rounded mr-6">
+                      <div>
+                        <div class="font-medium text-gray-900"><%= data.productdetail.Product_name %></div>
+                        <div class="mt-1 sm:hidden">$70.00</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="hidden py-6 pr-8 sm:table-cell">$<%= data.orderitemdetail.Price %></td>
+                  <td class="hidden py-6 pr-8 sm:table-cell"><%= data.Status%></td>
+                  <td class="py-6 font-medium text-right whitespace-nowrap">
+                    <a href="/api/v1/product_detail/<%= data.productdetail.id%>" class="text-indigo-600">View<span class="hidden lg:inline"> Product</span><span class="sr-only">, Machined Pen and Pencil Set</span></a>
+                  </td>
+                </tr>
+                <%})%>
+  
+                <!-- More products... -->
+              </tbody>
+            </table>
+          </div>
+          <%})%>
+          <!-- More orders... -->
         </div>
+      </div>
+    </div>
+  </div>
+  
+  
         <!-- ./info -->
 
-    </div>
     <!-- ./wrapper -->
 
     <!-- footer -->
@@ -341,53 +312,24 @@
         </div>
     </div>
     <!-- ./copyright -->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.0/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/static/js/search.js" type="text/javascript"></script>
     <script>
-        $(document).ready(function(){
-            $('#btn_change').click(function(){
-                var data_form = {
-                    password: $("#password").val(),
-                    newpass: $("#newpass").val(),
-                    confirm_pass: $("#confirm-pass").val()
-                }
-
-                $.ajax({
-                    url: "/api/v1/user/newpass",
-                    type: "post",
-                    data: data_form,
-                    dataType: "json",
-                    success: function(data){
-                        if(typeof data.errors != "undefined"){
-                        data.errors.errors.forEach(function(error){
-                            $("#alert").append("<div class='text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500'>"
-                                            +"<span class='text-xl inline-block mr-5 align-middle'>"
-                                              +  "<i class='fas fa-bell'></i>"
-                                            +"</span>"
-                                        +"<span class='inline-block align-middle mr-8'>"
-                                            + error.msg
-                                        +"</span>"
-                                    +"<button class='absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none' onclick='closeAlert(event)'>"
-                                            +"<span>×</span>"
-                                    +"</button>"
-                                    +"</div>")
-                            })
-                        }
-                        else if(data.statusCode === 200){
-                            window.location.href = "/api/v1/guest/login";
-                        }
+        $(".cancel_order").on("click", function(){
+            $.ajax({
+                url: "/api/v1/user/order_history",
+                type: "post",
+                data: {order_id: $(this).attr("order_id")},
+                dataType: 'json',
+                success: function(resp){
+                    if(resp.statusCode === 200){
+                        window.location.href = "/api/v1/user/order_history";
                     }
-                })
+                }
             })
-        })
-
-        function closeAlert(event){
-          let element = event.target;
-          while(element.nodeName !== "BUTTON"){
-            element = element.parentNode;
-          }
-          element.parentNode.parentNode.removeChild(element.parentNode);
-        };
+        });
     </script>
 </body>
 

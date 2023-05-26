@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const fs = require('fs');
+const {format} = require('date-fns');
 const createError = require('http-errors');
 require("dotenv").config();
 const multer = require('multer');
@@ -180,7 +181,9 @@ router.get('/cart',async (req,res) => {
         await orderService.createOrder(req.user.id, discount, sum);
         return res.json({statusCode: 200});
 })
+//==============================Cart
 
+//=======================Checkout
 router.get("/checkout", CheckoutMiddle.redirect_check ,async (req,res) => {
     const product_cart = await cartService.getAllProductByUserId(req.user.id);
     const order = await orderService.getOrderByUserId(req.user.id);
@@ -208,8 +211,7 @@ router.get('/vnpay_return', async (req, res) => {
     let signData = querystring.stringify(vnp_Params, { encode: false });
     let crypto = require("crypto");     
     let hmac = crypto.createHmac("sha512", secretKey);
-    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex"); 
-   // console.log(vnp_Params['vnp_ResponseCode']);    
+    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");    
     if(secureHash === signed){
         if(vnp_Params['vnp_ResponseCode'] === '24'){
             return res.redirect("/api/v1/user/checkout");
@@ -219,17 +221,57 @@ router.get('/vnpay_return', async (req, res) => {
             const product_cart = await cartService.getAllProductByUserId(req.user.id);
             product_cart.forEach(async function(product){
                 await orderService.addItemOrder(order.id, product.productdetail.id, product.productdetail.Product_name, product.cartdetail.Quantity, product.cartdetail.Price);
+                await productService.updateQuantity(product.productdetail.id, product.cartdetail.Quantity);
             });
             await orderService.updateOrder(req.user.id,"Đang xử lý");
+            await couponService.updateQuantityById(order.Coupon_id);
             await cartService.updateCartDeleted(req.user.id);
             if(order.Coupon_id){
                 await couponService.createCouponItem(order.Coupon_id,req.user.id);
             }
-
+            return res.render('payment_success', {code: vnp_Params['vnp_ResponseCode']})
         }
-        res.render('payment_success', {code: vnp_Params['vnp_ResponseCode']})
     } else{
         res.render('payment_success', {code: '97'})
     }
 });
+//======================Checkout
+
+//=======================Order History
+router.get("/order_history", async (req,res) => {
+    const cart = await cartService.getItembyUserId(req.user.id);
+    const order = await orderService.getAllOrderByUserId(req.user.id);
+    const coupon = await orderService.getDiscountofOrderByUserID(req.user.id);
+    res.render("order_history", {sum_cart:cart, order: order, format: format, coupon: coupon});
+})
+    .post("/order_history", async (req,res) => {
+        const {order_id} = req.body;
+        await orderService.CancelOrder(order_id);
+        const order = await orderService.getOrderItemByOrderId(order_id);
+        order.forEach(async function(orders){
+            await productService.updateQuantity(orders.productdetail.id, - Number(orders.orderitemdetail.Quantity));
+        });
+        res.json({statusCode: 200});
+})
+//=================Order History
+
+
+//=====================Order detail
+router.get("/order_deatail/:orderId", async (req,res) => {
+    const orderId = req.params.orderId;
+    const order = await orderService.getOrderItemByOrderId(orderId);
+    var sum = 0;
+    order.forEach(function(data){
+        sum = sum + (data.orderitemdetail.Quantity * data.orderitemdetail.Price);
+    })
+    sum = order[0].Total - sum;
+    res.render("order_detail", {order: order, format: format, sum: sum});
+})
+
+//====================Review
+router.post("/review", async (req,res) => {
+    const {rating, content} = req.body;
+    console.log(rating + " " + content);
+    res.json({data: "OK"});
+})
 module.exports = router;

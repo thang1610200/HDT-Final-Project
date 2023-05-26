@@ -114,6 +114,9 @@ module.exports = {
   paging: async (page) => { // phân trang
     let pageSize = 6;
     return await product.find({isDeleted: false}).skip((page - 1) * pageSize).limit(pageSize);
+  },
+  updateQuantity: async (id, Quantity) => {  // Cập nhật số lượng sản phẩm đã bán
+    return await product.updateOne({id},{$inc: {Sold: Quantity}});
   }
 
 }

@@ -25,6 +25,8 @@ module.exports = {
     },
     createCouponItem: async (Coupon_id, User_id) => {  // thêm dữ liệu vào bảng Coupon Item
         return await couponItemModel.create({Coupon_id, User_id, isUsed: true});
+    },
+    updateQuantityById: async (Coupon_id) => {  // Cập nhật số lượng mã giảm giá
+        return await couponModel.updateOne({Coupon_id},{$inc: {Quantity: -1}});
     }
-
 }

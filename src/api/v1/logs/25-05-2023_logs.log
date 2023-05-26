@@ -123,3 +123,18 @@ Cannot read properties of undefined (reading 'id')
 
 Cannot read properties of undefined (reading 'id')
 25-05-2023	16:43:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+25-05-2023	31:46:20==============/api/v1/user/shop====GET====NotFoundError: This route does not exist
+25-05-2023	31:24:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+25-05-2023	03:26:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+25-05-2023	48:13:22==============/api/v1/user/order_history====GET====SyntaxError: missing ) after argument list in C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_history.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+25-05-2023	48:13:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+25-05-2023	00:16:22==============/api/v1/user/order_history====GET====SyntaxError: missing ) after argument list in C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_history.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+25-05-2023	00:16:22==============/favicon.ico====GET====NotFoundError: This route does not exist

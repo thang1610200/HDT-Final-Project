@@ -1,0 +1,95 @@
+26-05-2023	36:48:08==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	49:53:08==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	46:02:09==============/api/v1/user/order_history====GET====RangeError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_history.ejs:159
+    157|                   <dt class="font-medium text-gray-900">Date placed</dt>
+    158|                   <dd class="sm:mt-1">
+ >> 159|                     <time datetime="2021-01-22"><%= `${format(orders.infor[0].Create_at, 'MMMM dd, YYYY')}`%></time>
+    160|                   </dd>
+    161|                 </div>
+    162|                 <div class="flex justify-between pt-6 sm:block sm:pt-0">
+
+Use `yyyy` instead of `YYYY` (in `MMMM dd, YYYY`) for formatting years to the input `Thu May 25 2023 10:22:23 GMT+0700 (Indochina Time)`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+26-05-2023	46:02:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	43:03:09==============/api/v1/user/order_history====GET====RangeError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_history.ejs:159
+    157|                   <dt class="font-medium text-gray-900">Date placed</dt>
+    158|                   <dd class="sm:mt-1">
+ >> 159|                     <p><%= `${format(orders.infor[0].Create_at, 'MMMM dd, YYYY')}`%></p>
+    160|                   </dd>
+    161|                 </div>
+    162|                 <div class="flex justify-between pt-6 sm:block sm:pt-0">
+
+Use `yyyy` instead of `YYYY` (in `MMMM dd, YYYY`) for formatting years to the input `Thu May 25 2023 21:26:02 GMT+0700 (Indochina Time)`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+26-05-2023	43:03:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	05:04:09==============/api/v1/user/order_history====GET====RangeError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_history.ejs:159
+    157|                   <dt class="font-medium text-gray-900">Date placed</dt>
+    158|                   <dd class="sm:mt-1">
+ >> 159|                     <p><%= `${format(new Date(orders.infor[0].Create_at), 'MMMM dd, YYYY')}`%></p>
+    160|                   </dd>
+    161|                 </div>
+    162|                 <div class="flex justify-between pt-6 sm:block sm:pt-0">
+
+Use `yyyy` instead of `YYYY` (in `MMMM dd, YYYY`) for formatting years to the input `Thu May 25 2023 21:26:02 GMT+0700 (Indochina Time)`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+26-05-2023	05:04:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	51:32:09==============/api/v1/user/order_history====GET====SyntaxError: Illegal break statement in C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_history.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+26-05-2023	51:32:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	50:37:09==============/api/v1/user/order_history====GET====SyntaxError: Illegal break statement in C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_history.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+26-05-2023	50:37:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	23:38:09==============/api/v1/user/order_history====GET====SyntaxError: Illegal break statement in C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_history.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+26-05-2023	23:38:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	36:38:09==============/api/v1/user/order_history====GET====SyntaxError: Illegal break statement in C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_history.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+26-05-2023	36:38:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	42:44:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	10:47:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	23:48:09==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	12:40:13==============/api/v1/admin/%7B%7B====GET====NotFoundError: This route does not exist
+26-05-2023	12:40:13==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	07:08:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	38:16:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	02:17:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	43:17:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	04:18:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	45:18:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	16:23:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	20:26:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	28:28:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	38:35:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	16:50:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	47:52:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	58:52:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	53:56:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	34:58:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	53:58:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	56:58:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	54:59:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	30:02:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	13:18:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	11:19:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	08:23:15==============/api/v1/user/order_deatail/11b280e2-5463-46ec-a0a5-5a1471148074====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\order_detail.ejs:142
+    140|             <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0">
+    141|               <div class="flex sm:items-baseline sm:space-x-4">
+ >> 142|                 <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">Order #<%= orders[0].id.slice(0,8).toUpperCase()%></h1>
+    143|                 <a href="/api/v1/user/order_history" class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block">View orders<span aria-hidden="true"> &rarr;</span></a>
+    144|               </div>
+    145|               <p class="text-sm text-gray-600">Order placed <time datetime="2021-03-22" class="font-medium text-gray-900">March 22, 2021</time></p>
+
+orders is not defined
+26-05-2023	08:23:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	26:25:15==============/api/v1/user/shop====GET====NotFoundError: This route does not exist
+26-05-2023	26:25:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+26-05-2023	09:26:15==============/favicon.ico====GET====NotFoundError: This route does not exist
