@@ -15,6 +15,7 @@ const UserService = require("@service/user.service");
 const ResetPassService = require("@service/resetpass.service");
 const passportConfig = require("@config/passport.config");
 const {client} = require("@common/Redis");
+const Author = require("@middleware/Author.middleware");
 require("dotenv").config();
 
 const router = express.Router();
@@ -129,8 +130,11 @@ router.get("/register", (req,res) => {
 //============================Register====================//
 
 //============================Login
-router.get("/login", (req,res) => {
-    res.render("login",{message: req.flash('register')});
+router.get("/login", Author.publicURL, (req,res, next) => {
+    if(!req.user){
+        return res.render("login",{message: req.flash('register')});
+    }
+    return res.redirect("/api/v1/shop")
 })
     .post("/login", LoginValidation ,async (req,res) => {
         const errors = validationResult(req);

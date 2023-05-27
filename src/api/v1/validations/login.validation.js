@@ -2,7 +2,7 @@ const {body} = require("express-validator");
 const UserService = require('@service/user.service');
 
 const checkvalidator = [body('email').custom(async (value,{req}) => {
-                            const user = await UserService.getOnebyEmail(value);
+                            const user = await UserService.getOnebyEmailAndStatus(value);
                             if(user){
                                 if(user.ComparePass(req.body.password)){
                                     try{

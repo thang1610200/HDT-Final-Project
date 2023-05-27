@@ -14,6 +14,7 @@ const cartService = require("@service/cart.service");
 const productService = require("@service/product.service");
 const couponService = require("@service/coupon.service");
 const orderService = require("@service/order.service");
+const reviewService = require("@service/review.service");
 const drive = require("@util/drive");
 const {sendMail} = require("@util/mail.js");
 const NewpassValidator = require("@validation/newpass.validation");
@@ -188,10 +189,19 @@ router.get("/checkout", CheckoutMiddle.redirect_check ,async (req,res) => {
     const product_cart = await cartService.getAllProductByUserId(req.user.id);
     const order = await orderService.getOrderByUserId(req.user.id);
     const user = await userService.getUserbyId(req.user.id);
-    res.render("checkout",{product_cart: product_cart, sum: order.Total, user: user});
+    const cart = await cartService.getItembyUserId(req.user.id);
+    res.render("checkout",{product_cart: product_cart, sum: order.Total, user: user, sum_cart:cart});
 })
     .post("/checkout", async (req,res) => {
         const order = await orderService.getOrderByUserId(req.user.id);
+        const user = await userService.getUserbyId(req.user.id);
+        if(!user.phone || !user.address){
+            return res.json({statusCode: 201});
+        }
+        
+        if(!user.isEmailActive){
+            return res.json({statusCode: 202});
+        }
         vnpayApi.checkout(req,res,order);
 })
 
@@ -259,19 +269,13 @@ router.get("/order_history", async (req,res) => {
 //=====================Order detail
 router.get("/order_deatail/:orderId", async (req,res) => {
     const orderId = req.params.orderId;
+    const cart = await cartService.getItembyUserId(req.user.id);
     const order = await orderService.getOrderItemByOrderId(orderId);
     var sum = 0;
     order.forEach(function(data){
         sum = sum + (data.orderitemdetail.Quantity * data.orderitemdetail.Price);
     })
     sum = order[0].Total - sum;
-    res.render("order_detail", {order: order, format: format, sum: sum});
-})
-
-//====================Review
-router.post("/review", async (req,res) => {
-    const {rating, content} = req.body;
-    console.log(rating + " " + content);
-    res.json({data: "OK"});
+    res.render("order_detail", {order: order, format: format, sum: sum, sum_cart:cart});
 })
 module.exports = router;

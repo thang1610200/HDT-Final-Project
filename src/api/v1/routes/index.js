@@ -6,7 +6,9 @@ const listimageService = require("@service/listimage.service");
 const cartService = require("@service/cart.service");
 const categoryService = require("@service/category.service");
 const userService = require("@service/user.service");
+const reviewService = require("@service/review.service");
 const Author = require("@middleware/Author.middleware");
+const {format} = require('date-fns');
 const router = express.Router();
 
 
@@ -69,14 +71,21 @@ router.get("/product_detail/:id", Author.publicURL, async (req,res,next) => {
     const product = await productService.findAllandCategorybyId(id);
     const listimage = await listimageService.getImageByProductId(id);
     const productCate = await categoryService.getAllProductAndImagebyCate(product[0].Category_id);
+    // const productReview = await reviewService.getAllReviewbyProductId();
+    // console.log(productReview);
     if(product.length != 0){
+        const review = await reviewService.getAllReviewbyApproved(id);
+        var sum_star = 5;
+        review.forEach(function(data){
+            sum_star = sum_star + data.rating; 
+        });
         var cart;
         if(req.user !== null){
             cart = await cartService.getItembyUserId(req.user.id);
         }
-        return res.render("product_detail",{product: product, listimage: listimage, productCate: productCate, sum_cart:cart});
+        return res.render("product_detail",{product: product, listimage: listimage, productCate: productCate, sum_cart:cart, review: review, format: format, sum_star: sum_star});
     }
-    return next(new createError.Forbidden())
+    return next(new createError.Forbidden()); // khi req.params.id ko tồn tại;
 })
     .post("/product_detail",Author.publicURL, async (req,res) => {
         const {id, quantity} = req.body;
@@ -100,6 +109,17 @@ router.get("/product_detail/:id", Author.publicURL, async (req,res,next) => {
         const product = await productService.findOnebyId(id);
         res.json({data:product});
 })
+
+//====================Review
+router.post("/review", Author.publicURL, async (req,res) => {
+    const {rating, content, product_id} = req.body;
+    if(req.user !== null){
+        await reviewService.createReview(req.user.id, product_id, rating, content);
+        return res.json({statusCode: 200});
+    }
+    return res.json({statusCode: 403});
+})
+
 //=========================Product Detail
 
 //Verify Email

@@ -53,7 +53,7 @@
                 <div class="text-xs leading-3">Cart</div>
                 <div id="count_cart"
                     class="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                   2 </div>
+                    <% if(typeof sum_cart !== 'undefined'){ %> <% if(sum_cart.length > 0){%><%= sum_cart[0].cartdetail.length%><%} else{%>0<%}%>  <%} else {%> 0 <%}%></div>
             </a>
             <a href="/api/v1/user/profile" class="text-center text-gray-700 hover:text-primary transition relative">
                 <div class="text-2xl">
@@ -268,6 +268,7 @@
     </div>
     <!-- ./copyright -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="/static/js/search.js" type="text/javascript"></script>
   <script>
       $("#pay_click").click(function(){
           $.ajax({
@@ -276,6 +277,12 @@
             success: function(data){
               if(data.statusCode === 200){
                 location.href = data.vnpUrl;
+              }
+              else if(data.statusCode === 201){
+                alert("Vui lòng cập nhật thông tin");
+              }
+              else if(data.statusCode === 202){
+                alert("Vui lòng kích hoạt email");
               }
             }
           })

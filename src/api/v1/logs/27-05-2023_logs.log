@@ -1,0 +1,85 @@
+27-05-2023	19:51:14==============/api/v1/admin/user====GET====ReferenceError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\user.ejs:278
+    276|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"></td>
+    277|                                 <td class="p-4 whitespace-nowrap space-x-2">
+ >> 278|                                     <button type="button" category_id ="<%= data[i].id%>" data-modal-toggle="product-modal" class="edit_category text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
+    279|                                         <svg class="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+    280|                                         Edit item
+    281|                                     </button>
+
+data is not defined
+27-05-2023	19:51:14==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	36:04:15==============/api/v1/admin/user====GET====Error: Could not find matching close tag for "<%=".
+27-05-2023	36:04:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	51:04:15==============/api/v1/admin/user====GET====RangeError: C:\Users\nguye\Documents\HDT-Final-Project\src\api\v1\views\user.ejs:275
+    273|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><% if(users.isEmailActive === true){%> ON <%} else {%> OFF <%}%></td>
+    274|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><% if(users.isPhoneActive === true){%> ON <%} else {%> OFF <%}%></td>
+ >> 275|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><%= `${format(users.Create_at, 'dd-MM-yyyy\tHH:mm:ss')}`%></td>
+    276|                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900"><%= `${format(users.Update_at, 'dd-MM-yyyy\tHH:mm:ss')}`%></td>
+    277|                                 <td class="p-4 whitespace-nowrap space-x-2">
+    278|                                     <button type="button" category_id ="" data-modal-toggle="product-modal" class="edit_category text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
+
+Invalid time value
+27-05-2023	51:04:15==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	49:10:19==============/api/v1/admin/edit_user====POST====NotFoundError: This route does not exist
+27-05-2023	49:10:19==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	49:38:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	49:38:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	49:38:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	49:38:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	49:38:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	49:38:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	49:38:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	04:40:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	04:40:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	04:40:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	05:40:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	05:40:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	27:40:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	27:40:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	27:40:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	27:40:19==============/api/v1/admin/api/v1/admin/user/check_currentpass====POST====NotFoundError: This route does not exist
+27-05-2023	11:43:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	05:44:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	11:51:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	32:51:20==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	39:02:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	53:07:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	10:14:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	23:14:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	59:14:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	51:15:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	29:18:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	54:33:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	39:36:21==============/====GET====NotFoundError: This route does not exist
+27-05-2023	40:36:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	57:48:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	12:51:21==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	02:02:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	19:06:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	37:08:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	41:08:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	58:11:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	40:13:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	41:13:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	45:13:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	46:13:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	05:14:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	06:14:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	16:14:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	17:14:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	19:14:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	20:14:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	26:14:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	27:14:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	01:15:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	02:15:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	25:15:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	26:15:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	10:16:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	10:16:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	15:16:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	16:16:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	05:18:22==============/api/v1/admin/user?fbclid=IwAR0CZkb2pRvkeaAlvVeMrsAIs2lL2MRLYsoa_19npn6Zp4Qc0XUP9kGr-SM====GET====ForbiddenError: Forbidden
+27-05-2023	06:18:22==============/favicon.ico====GET====NotFoundError: This route does not exist
+27-05-2023	30:24:22==============/api/v1/admin/%7B%7B====GET====NotFoundError: This route does not exist
+27-05-2023	30:24:22==============/favicon.ico====GET====NotFoundError: This route does not exist

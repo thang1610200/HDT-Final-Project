@@ -117,6 +117,18 @@ module.exports = {
   },
   updateQuantity: async (id, Quantity) => {  // Cập nhật số lượng sản phẩm đã bán
     return await product.updateOne({id},{$inc: {Sold: Quantity}});
+  },
+  GroupProductAndReview: async () => {  // đếm số lượng đánh giá trong mỗi Product
+    return await product.aggregate([
+        {
+            $lookup: {
+                from: "reviews",
+                localField: "id",
+                foreignField: "Product_id",
+                as: "reviewdetail"
+            }
+        }
+    ]);
   }
 
 }

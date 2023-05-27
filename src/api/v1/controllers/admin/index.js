@@ -2,11 +2,13 @@ const express = require("express");
 require("module-alias/register");
 const multer = require('multer');
 const Author = require("@middleware/Author.middleware");
+const userService = require("@service/user.service");
 const productService = require("@service/product.service");
 const categoryService = require("@service/category.service");
 const listimageService = require("@service/listimage.service");
 const couponService = require("@service/coupon.service");
 const orderService = require("@service/order.service");
+const reviewService = require("@service/review.service");
 const drive = require("@util/drive");
 const {format} = require('date-fns');
 const router = express.Router();
@@ -176,6 +178,70 @@ router.get("/order_item/:orderId", async (req,res) => {
     return res.render("order_item", {order: order, format: format});
 })
 
+//================================Review
+router.get("/review", async (req,res) => {
+    const review = await reviewService.getAllReview();
+    res.render("reviews",{review: review, format: format});
+})
+    .post("/review", async (req,res) => {
+        const {id, approved} = req.body;
+        await reviewService.updateApproved(id, approved);
+        return res.json({statusCode: 200});
+})
+
+//===========================User
+router.get("/user", async (req,res) => {
+    const user = await userService.getAllUser();
+    res.render("user", {user: user, format: format});
+})
+    .post("/check_email", async (req,res) => {
+        const {content} = req.body;
+        const user = await userService.getOnebyEmail(content);
+        if(user){
+            return res.json({"status":"No"});
+        }
+        else{
+            return res.json({"status": "OK"});
+        }
+})
+    .post("/user", async (req,res) => {
+        const {fullname, email, password, role} = req.body;
+        await userService.createUserByAdmin(fullname, email, role, password);
+        res.redirect("/api/v1/admin/user");
+})
+    .post("/user/edit_infor", async (req,res) => {
+        const {id} = req.body;
+        const user = await userService.getUserbyId(id);
+        return res.json({data: user});
+})
+    .post("/edit_user", async (req,res) => {
+        const {fullname_edit, address_edit, email_edit, role_edit, phone_edit, id_edit} = req.body;
+        if(phone_edit){
+            await userService.updateInforAdmin(id_edit, fullname_edit, address_edit, phone_edit, role_edit);
+        }
+        else{
+            await userService.updateInforNoPhoneAdmin(id_edit, fullname_edit, address_edit, role_edit);
+        }
+        res.redirect("/api/v1/admin/user");
+})
+    .post("/user/change_pass", async (req,res) => {
+        const {id_edit_pass, new_password} = req.body;
+        await userService.updatePassbyID(id_edit_pass, new_password);
+        res.redirect("/api/v1/admin/user");
+})
+    .post("/user/check_currentpass", async (req,res) => {
+        const {password, id} = req.body;
+        const user = await userService.getUserbyId(id);
+        if(user.ComparePass(password)){
+            return res.json({"status":"OK"});
+        }
+        return res.json({"status": "No"});
+})
+    .post("/delete_user", async (req,res) => {
+        const {user_id_delete} = req.body;
+        await userService.setStatusById(user_id_delete, true);
+        res.redirect("/api/v1/admin/user");
+})
 
 
 module.exports = router;

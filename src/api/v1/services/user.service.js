@@ -44,5 +44,23 @@ module.exports = {
     },
     ActiveEmail: async (code) => {  // Active email
         return await User.updateOne({email_code: code},{isEmailActive: true});
+    },
+    getAllUser: async () => { // lấy taats cả các User
+        return await User.find();
+    },
+    createUserByAdmin: async (fullname, email,role, password) => {  // admin tạo User
+        return await User.create({fullname, email,role, password});
+    },
+    setStatusById: async (id, status) => {       // Xóa account
+        return await User.updateOne({id},{status});
+    },
+    getOnebyEmailAndStatus: async (email) => {      // lọc 1 dòng theo email vaf status
+        return await User.findOne({email, status: false});
+    },
+    updateInforAdmin: async (id,fullname, address, phone, role) => {  // cập nhật thông tin của User
+        return await User.findOneAndUpdate({id},{fullname,address, phone, role},{new: true});
+    },
+    updateInforNoPhoneAdmin: async (id,fullname, address,role) => {   // cập nhật thông tin của User khi đã có phone
+        return await User.findOneAndUpdate({id},{fullname,address, role},{new: true});
     }
 }

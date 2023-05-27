@@ -3696,6 +3696,9 @@ html {
 .mr-1 {
   margin-right: 0.25rem;
 }
+.mr-12 {
+  margin-right: 3rem;
+}
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -4812,6 +4815,9 @@ html {
 .outline {
   outline-style: solid;
 }
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
 .transition {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
@@ -5486,6 +5492,10 @@ html {
 
   .lg\:ml-64 {
     margin-left: 16rem;
+  }
+
+  .lg\:mr-0 {
+    margin-right: 0px;
   }
 
   .lg\:mt-0 {

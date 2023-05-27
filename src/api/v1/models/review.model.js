@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const {v4: uuidv4} = require("uuid");
 
-const cartSchema = new mongoose.Schema({
+const reviewSchema = new mongoose.Schema({
     id: String,
     Product_id: String,
     User_Id: String,
@@ -12,8 +12,8 @@ const cartSchema = new mongoose.Schema({
     Update_at: Date
 })
 
-cartSchema.pre("save", function(){
+reviewSchema.pre("save", function(){
     this.id = uuidv4()
 })
 
-module.exports = mongoose.model("cart",cartSchema);
+module.exports = mongoose.model("review",reviewSchema);
