@@ -14,7 +14,7 @@ const cartService = require("@service/cart.service");
 const productService = require("@service/product.service");
 const couponService = require("@service/coupon.service");
 const orderService = require("@service/order.service");
-const reviewService = require("@service/review.service");
+const wishlistService = require("@service/wishlist.service");
 const drive = require("@util/drive");
 const {sendMail} = require("@util/mail.js");
 const NewpassValidator = require("@validation/newpass.validation");
@@ -23,6 +23,7 @@ const {client} = require("@common/Redis");
 const vnpayApi = require('@util/vnpay');
 const configVNP = require("@config/vnpay.config");
 const { validationResult } = require('express-validator');
+const reviewService = require("@service/review.service");
 
 
 router.use(Author.verifyToken);
@@ -32,7 +33,8 @@ const upload = multer();
 router.get("/profile", async (req,res) => {
     const user = await userService.getUserbyId(req.user.id);
     const cart = await cartService.getItembyUserId(req.user.id);
-    res.render("profile",{data: user, sum_cart:cart});
+    const wishlist = await wishlistService.findAllByUserId(req.user.id);
+    res.render("profile",{data: user, sum_cart:cart, sum_wish: wishlist});
 })
     .post("/profile",upload.single("photo"), async (req,res) => {
         const {fullname, address, phone} = req.body;
@@ -67,10 +69,11 @@ router.get('/email',async (req,res) => {
 router.get('/newpass',async (req,res) =>{
     const user = await userService.getUserbyId(req.user.id);
     const cart = await cartService.getItembyUserId(req.user.id);
+    const wishlist = await wishlistService.findAllByUserId(req.user.id);
     if(!user.password){
-        return res.render("set_password",{data: user, sum_cart:cart});
+        return res.render("set_password",{data: user, sum_cart:cart, sum_wish: wishlist});
     }
-    res.render('change_password',{data: user, sum_cart:cart});
+    res.render('change_password',{data: user, sum_cart:cart, sum_wish: wishlist});
 })
     .post('/newpass',NewpassValidator, async(req,res,next) => {
         const errors = validationResult(req);
@@ -174,7 +177,7 @@ router.get('/cart',async (req,res) => {
         var discount;
         if(coupon){
             const couponitem = await couponService.getItemByUserIDAndCode(req.user.id, coupon.id);
-            if(!couponitem){
+            if(!couponitem && !coupon.Status && coupon.Quantity > 0 && (new Date(coupon.Start_date) <= new Date()) && (new Date(coupon.End_date) >= new Date() )){
                 discount = coupon.id;
                 sum = (sum * (100 - coupon.Value)) / 100;
             }
@@ -190,7 +193,8 @@ router.get("/checkout", CheckoutMiddle.redirect_check ,async (req,res) => {
     const order = await orderService.getOrderByUserId(req.user.id);
     const user = await userService.getUserbyId(req.user.id);
     const cart = await cartService.getItembyUserId(req.user.id);
-    res.render("checkout",{product_cart: product_cart, sum: order.Total, user: user, sum_cart:cart});
+    const wishlist = await wishlistService.findAllByUserId(req.user.id);
+    res.render("checkout",{product_cart: product_cart, sum: order.Total, user: user, sum_cart:cart, sum_wish: wishlist});
 })
     .post("/checkout", async (req,res) => {
         const order = await orderService.getOrderByUserId(req.user.id);
@@ -202,6 +206,15 @@ router.get("/checkout", CheckoutMiddle.redirect_check ,async (req,res) => {
         if(!user.isEmailActive){
             return res.json({statusCode: 202});
         }
+
+        if(order.Coupon_id){
+            const coupon = await couponService.getCouponById(order.Coupon_id);
+            const couponItem = await couponService.getItemByUserIDAndCode(req.user.id, coupon.id);
+            if(coupon.Quantity <= 0 || couponItem || coupon.Status || (new Date(coupon.Start_date) > new Date()) || (new Date(coupon.End_date) < new Date() )){
+                return res.json({statusCode: 203});  // nếu số lượng disount không còn or user đã sài discount này r thì sẽ thông báo hoặc coupon ko còn time
+            }
+        }
+
         vnpayApi.checkout(req,res,order);
 })
 
@@ -234,11 +247,13 @@ router.get('/vnpay_return', async (req, res) => {
                 await productService.updateQuantity(product.productdetail.id, product.cartdetail.Quantity);
             });
             await orderService.updateOrder(req.user.id,"Đang xử lý");
-            await couponService.updateQuantityById(order.Coupon_id);
             await cartService.updateCartDeleted(req.user.id);
             if(order.Coupon_id){
                 await couponService.createCouponItem(order.Coupon_id,req.user.id);
+                await couponService.updateQuantityById(order.Coupon_id);
             }
+            await orderService.createTrans(order.id, vnp_Params['vnp_TxnRef'], vnp_Params['vnp_PayDate']);
+
             return res.render('payment_success', {code: vnp_Params['vnp_ResponseCode']})
         }
     } else{
@@ -252,7 +267,8 @@ router.get("/order_history", async (req,res) => {
     const cart = await cartService.getItembyUserId(req.user.id);
     const order = await orderService.getAllOrderByUserId(req.user.id);
     const coupon = await orderService.getDiscountofOrderByUserID(req.user.id);
-    res.render("order_history", {sum_cart:cart, order: order, format: format, coupon: coupon});
+    const wishlist = await wishlistService.findAllByUserId(req.user.id);
+    res.render("order_history", {sum_cart:cart, order: order, format: format, coupon: coupon, sum_wish: wishlist});
 })
     .post("/order_history", async (req,res) => {
         const {order_id} = req.body;
@@ -271,11 +287,51 @@ router.get("/order_deatail/:orderId", async (req,res) => {
     const orderId = req.params.orderId;
     const cart = await cartService.getItembyUserId(req.user.id);
     const order = await orderService.getOrderItemByOrderId(orderId);
+    const wishlist = await wishlistService.findAllByUserId(req.user.id);
     var sum = 0;
     order.forEach(function(data){
         sum = sum + (data.orderitemdetail.Quantity * data.orderitemdetail.Price);
     })
     sum = order[0].Total - sum;
-    res.render("order_detail", {order: order, format: format, sum: sum, sum_cart:cart});
+    res.render("order_detail", {order: order, format: format, sum: sum, sum_cart:cart, sum_wish: wishlist});
+})
+
+
+//=========================Wish list
+router.get("/wishlist", async (req,res) => {
+    const user = await userService.getUserbyId(req.user.id);
+    const cart = await cartService.getItembyUserId(req.user.id);
+    const wishlist = await wishlistService.findAllByUserId(req.user.id);
+    const wishProduct = await wishlistService.getProductWishListbyUserId(req.user.id);
+    res.render("wishlist", {data: user, sum_cart:cart, sum_wish: wishlist, wishlist: wishProduct});
+})
+    .post("/wishlist", async (req,res) => {
+        const {id } = req.body;
+        await wishlistService.addWishlist(req.user.id, id);
+        const wishlist = await wishlistService.findAllByUserId(req.user.id);
+        res.json({wishlist: wishlist});
+})
+    .post("/wishlist_cart", async (req,res) => {
+        const {id } = req.body;
+        const product = await productService.findOnebyId(id);
+        const cart = await cartService.addCart(req.user.id, product.id, product.Price);
+        const cartitem = await cartService.getItembyCartId(cart.Cart_id);
+        return res.json({cart: cartitem, statusCode: 200});
+})
+    .post("/del_wishlist", async (req,res) => {
+        const {id} = req.body;
+        await wishlistService.delProductWish(req.user.id, id);
+        const wishProduct = await wishlistService.getProductWishListbyUserId(req.user.id);
+        res.json({wishlist: wishProduct});
+})
+
+
+//=====================Review
+router.get("/my_review", async (req,res) => {
+    const user = await userService.getUserbyId(req.user.id);
+    const cart = await cartService.getItembyUserId(req.user.id);
+    const wishlist = await wishlistService.findAllByUserId(req.user.id);
+    const review = await reviewService.getAllReviewbyProductId(req.user.id);
+    res.render("my_review", {data: user, sum_cart:cart, sum_wish: wishlist, review: review});
 })
 module.exports = router;

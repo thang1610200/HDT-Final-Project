@@ -41,14 +41,14 @@
             </div>
 
             <div class="flex items-center space-x-4">
-                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                <a href="/api/v1/user/wishlist" class="text-center text-gray-700 hover:text-primary transition relative">
                     <div class="text-2xl">
                         <i class="fa-regular fa-heart"></i>
                     </div>
                     <div class="text-xs leading-3">Wishlist</div>
-                    <!-- <div
+                    <div id="count_wish"
                         class="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                        8</div> -->
+                        <% if(typeof sum_wish !== 'undefined'){ %> <%= sum_wish.length%>  <%} else {%> 0 <%}%></div>
                 </a>
                 <a href="/api/v1/user/cart" class="text-center text-gray-700 hover:text-primary transition relative">
                     <div class="text-2xl">
@@ -276,11 +276,11 @@
                                 title="view product">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </a>
-                            <a href="#"
+                            <button id="add_wishlist" product_id="<%= product.id%>"
                                 class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
                                 title="add to wishlist">
                                 <i class="fa-solid fa-heart"></i>
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <div class="pt-4 pb-3 px-4">
@@ -437,6 +437,20 @@
                 $("#author").empty();
                 $("#author").append("<a href='/api/v1/guest/logout'>Logout</a>")
             }
+
+            $(document).on('click',"#add_wishlist",function(){
+                $.ajax({
+                    url: "/api/v1/user/wishlist",
+                    type: "post",
+                    data: {id: $(this).attr("product_id")},
+                    dataType: 'json',
+                    success: function(data){
+                        $("#count_wish").empty();
+                        $("#count_wish").append(data.wishlist.length);
+                    }
+                })
+            });
+
 
             $(document).on('click',".add_cart",function(){
                 $.ajax({

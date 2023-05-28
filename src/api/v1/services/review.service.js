@@ -63,16 +63,42 @@ module.exports = {
             }
         ]);
     },
-    getAllReviewbyProductId: async () => {
+    getAllReviewbyProductId: async (userid) => {
         return await reviewModel.aggregate([
+            {
+                $match: {isApproved: true, User_Id: userid}
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "Product_id",
+                    foreignField: "id",
+                    as: "productdetail"
+                }
+            },
+            {
+                $unwind: "$productdetail"
+            },
+            {
+                $lookup:
+                    {
+                      from: 'listimages',
+                      localField: 'Product_id',
+                      foreignField: 'Product_Id',
+                      as: 'image_product'
+                    }
+            },
+            {
+                $unwind: "$image_product"
+            },
+            {
+                $match: {"image_product.Main_Image": true}
+            },
             {
                 $group: {
                     _id: "$Product_id",
                     infor: {$push: "$$ROOT"}
                 }
-            },
-            {
-                $match: {"infor.isApproved": true}
             }
         ]);
     }

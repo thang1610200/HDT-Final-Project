@@ -9,8 +9,12 @@ const listimageService = require("@service/listimage.service");
 const couponService = require("@service/coupon.service");
 const orderService = require("@service/order.service");
 const reviewService = require("@service/review.service");
+const vnpayApi = require('@util/vnpay');
+const configVNP = require("@config/vnpay.config");
 const drive = require("@util/drive");
 const {format} = require('date-fns');
+const request = require('request');
+const createError = require('http-errors');
 const router = express.Router();
 
 const upload = multer();
@@ -168,6 +172,80 @@ router.get("/order", async (req,res) => {
         await await orderService.updateDeliveryTimeOrder(order_id_edit, new Date(start_date));
         res.redirect("/api/v1/admin/order");
 })
+    .post('/refund',async function (req, res, next) {
+        process.env.TZ = 'Asia/Ho_Chi_Minh';
+        let date = new Date();
+
+        let crypto = require("crypto");
+        const order = await orderService.getTransByOrderId(req.body.id);
+        let vnp_TmnCode = configVNP.vnp_TmnCode
+        let secretKey = configVNP.vnp_HashSecret;
+        let vnp_Api = configVNP.vnp_Api;
+        
+        let vnp_TxnRef = order[0].SHD;
+        let vnp_TransactionDate = order[0].Createtime;
+        let vnp_Amount = Number(order[0].orderdetail.Total) * 100;
+        let vnp_TransactionType = '02';
+        let vnp_CreateBy = "Thang";
+                
+        let currCode = 'VND';
+        
+        let vnp_RequestId = `${format(date, 'HHmmss')}`;
+        let vnp_Version = '2.1.0';
+        let vnp_Command = 'refund';
+        let vnp_OrderInfo = 'Hoan tien GD ma:' + vnp_TxnRef;
+                
+        let vnp_IpAddr = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
+
+        
+        let vnp_CreateDate = `${format(date, 'yyyyMMddHHmmss')}`;
+        
+        let vnp_TransactionNo = '0';
+        
+        let data = vnp_RequestId + "|" + vnp_Version + "|" + vnp_Command + "|" + vnp_TmnCode + "|" + vnp_TransactionType + "|" + vnp_TxnRef + "|" + vnp_Amount + "|" + vnp_TransactionNo + "|" + vnp_TransactionDate + "|" + vnp_CreateBy + "|" + vnp_CreateDate + "|" + vnp_IpAddr + "|" + vnp_OrderInfo;
+        let hmac = crypto.createHmac("sha512", secretKey);
+        let vnp_SecureHash = hmac.update(Buffer.from(data, 'utf-8')).digest("hex");
+        
+        let dataObj = {
+            'vnp_RequestId': vnp_RequestId,
+            'vnp_Version': vnp_Version,
+            'vnp_Command': vnp_Command,
+            'vnp_TmnCode': vnp_TmnCode,
+            'vnp_TransactionType': vnp_TransactionType,
+            'vnp_TxnRef': vnp_TxnRef,
+            'vnp_Amount': vnp_Amount,
+            'vnp_TransactionNo': vnp_TransactionNo,
+            'vnp_CreateBy': vnp_CreateBy,
+            'vnp_OrderInfo': vnp_OrderInfo,
+            'vnp_TransactionDate': vnp_TransactionDate,
+            'vnp_CreateDate': vnp_CreateDate,
+            'vnp_IpAddr': vnp_IpAddr,
+            'vnp_SecureHash': vnp_SecureHash
+        };
+        request({
+            url: vnp_Api,
+            method: "POST",
+            json: true,   
+            body: dataObj
+                }, async function (error, response, body){
+                    if(response.body.vnp_ResponseCode === '00'){
+                        const orders = await orderService.getOrderItemByOrderId(order[0].orderId);
+                        orders.forEach(async function(data){
+                            await productService.updateQuantity(data.productdetail.id, - data.orderitemdetail.Quantity);
+                        })
+                        return res.json({statusCode: 200});
+                    }
+                    else if (response.body.vnp_ResponseCode === '94'){
+                        return res.json({statusCode: 201});
+                    }
+                    else {
+                        return next(new createError.InternalServerError());
+                    }
+                }); 
+});
 
 router.get("/order_item/:orderId", async (req,res) => {
     const orderId = req.params.orderId;

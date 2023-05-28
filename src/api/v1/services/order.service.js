@@ -1,5 +1,6 @@
 const orderModel = require("@model/order.model");
 const orderitemModel = require("@model/orderitem.model");
+const transModel = require("@model/transaction.model");
 
 module.exports = {
     createOrder: async (User_id, Coupon, Total) => { // khởi tạo 1 đơn hàng
@@ -210,5 +211,25 @@ module.exports = {
     },
     CancelOrder: async (orderId) => {       // hủy đơn hàng
         return await orderModel.updateOne({id: orderId},{Status: "Hủy"});
+    },
+    createTrans: async (orderId, SHD, create) => {
+        return await transModel.create({orderId, SHD, Createtime: create});
+    },
+    getTransByOrderId: async (orderId) => {
+        return await transModel.aggregate([
+            {
+                $lookup: {
+                    from: 'orders',
+                    localField: 'orderId',
+                    foreignField: 'id',
+                    as: 'orderdetail'
+                }
+            },
+            {
+                $unwind: "$orderdetail"
+            },{
+                $match: {orderId}
+            }
+        ]);
     }
 }

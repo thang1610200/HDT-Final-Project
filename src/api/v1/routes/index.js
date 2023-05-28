@@ -7,6 +7,7 @@ const cartService = require("@service/cart.service");
 const categoryService = require("@service/category.service");
 const userService = require("@service/user.service");
 const reviewService = require("@service/review.service");
+const wishlistService = require("@service/wishlist.service");
 const Author = require("@middleware/Author.middleware");
 const {format} = require('date-fns');
 const router = express.Router();
@@ -27,11 +28,13 @@ router.get("/shop", Author.publicURL ,async (req,res) => {
     const product = await productService.paging(1);
     const image = await listimageService.getMainImage();
     var cart;
+    var wishlist;
     if(req.user !== null){
         cart = await cartService.getItembyUserId(req.user.id);
+        wishlist = await wishlistService.findAllByUserId(req.user.id);
     }
     const cate = await categoryService.catejoinProductbyDel();
-    res.render("shop",{data: product, count: countProduct.length, sum_cart:cart, imagem: image, cate: cate});
+    res.render("shop",{data: product, count: countProduct.length, sum_cart:cart, imagem: image, cate: cate, sum_wish: wishlist});
 })
     .post("/shop",Author.publicURL, async (req,res) => {
         const {id} = req.body;
@@ -80,10 +83,12 @@ router.get("/product_detail/:id", Author.publicURL, async (req,res,next) => {
             sum_star = sum_star + data.rating; 
         });
         var cart;
+        var wishlist;
         if(req.user !== null){
             cart = await cartService.getItembyUserId(req.user.id);
+            wishlist = await wishlistService.findAllByUserId(req.user.id);
         }
-        return res.render("product_detail",{product: product, listimage: listimage, productCate: productCate, sum_cart:cart, review: review, format: format, sum_star: sum_star});
+        return res.render("product_detail",{product: product, listimage: listimage, productCate: productCate, sum_cart:cart, review: review, format: format, sum_star: sum_star, sum_wish: wishlist});
     }
     return next(new createError.Forbidden()); // khi req.params.id ko tồn tại;
 })
