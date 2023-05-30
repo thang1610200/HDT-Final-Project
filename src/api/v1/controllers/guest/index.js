@@ -39,10 +39,11 @@ passport.use(new FacebookStrategy({
   },
   async function(accessToken, refreshToken, profile, cb) {        // B2: trả dữ liệu về
         try{
-            const user = await UserService.getOnebyEmail(profile.emails[0].value);
+            var user = await UserService.getOnebyEmail(profile.emails[0].value);
 
             if(!user){
-                user = await UserService.createUserNoPass(profile.displayName, profile.emails[0].value);
+                await UserService.createUserNoPass(profile.displayName, profile.emails[0].value);
+                user = await UserService.getOnebyEmail(profile.emails[0].value);
             }
             return cb(null,user);
         }
@@ -66,7 +67,7 @@ passport.use(new FacebookStrategy({
        // sameSite: "strict",
         maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
-       res.redirect('/api/v1/shop');
+      return res.redirect('/api/v1/shop');
    });
 //==========================Login FB ====================================//
 
@@ -78,10 +79,11 @@ passport.use(new GoogleStrategy({
   },
   async function(accessToken, refreshToken, profile, cb) {
     try{
-        const user = await UserService.getOnebyEmail(profile.emails[0].value);
+        var user = await UserService.getOnebyEmail(profile.emails[0].value);
 
         if(!user){
-            user = await UserService.createUserNoPass(profile.displayName, profile.emails[0].value);
+            await UserService.createUserNoPass(profile.displayName, profile.emails[0].value);
+            user = await UserService.getOnebyEmail(profile.emails[0].value);
         }
         return cb(null,user);
     }
@@ -106,7 +108,7 @@ passport.use(new GoogleStrategy({
       //sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000 // 1 day
       });
-    res.redirect('/api/v1/shop');
+   return res.redirect('/api/v1/shop');
    });
 
 //==========================Login GG ====================================//

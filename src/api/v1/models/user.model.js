@@ -8,6 +8,9 @@ const fs = require("fs");
 require("dotenv").config();
 const {client} = require("@common/Redis");
 const {sendMail} = require("@util/mail.js");
+const OtpModel = require('@model/otp.model');
+const generateOtp = require('otp-generator');
+const sms = require('@util/sms.js');
 
 const user = new mongoose.Schema({
     id: String,
@@ -70,6 +73,19 @@ user.methods.TokenResetPass = function(){
         const url = `${process.env.URL}/api/v1/guest/forgot_password/reset?token=${generalToken}&email=${this.email}`;
         sendMail(this.email,url);
     });
+}
+
+user.methods.SendOtp = async function(){
+    const Otp = generateOtp.generate(4,{digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false});
+    const number = "84" + this.phone.slice(1);
+    const text = "Code: " + Otp;
+   await sms.sendSMS(number,text);
+   await OtpModel.create({
+        phone: this.phone,
+        otp: Otp,
+        create_at: new Date()
+    })
+   return Otp;
 }
 
 module.exports = mongoose.model("User",user);

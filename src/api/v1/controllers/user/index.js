@@ -9,6 +9,7 @@ const multer = require('multer');
 require("module-alias/register");
 const Author = require("@middleware/Author.middleware");
 const CheckoutMiddle = require("@middleware/RedirectCheckout.middleware");
+const PhoneMiddle = require("@middleware/Phoneverify.middleware");
 const userService = require("@service/user.service");
 const cartService = require("@service/cart.service");
 const productService = require("@service/product.service");
@@ -24,6 +25,7 @@ const vnpayApi = require('@util/vnpay');
 const configVNP = require("@config/vnpay.config");
 const { validationResult } = require('express-validator');
 const reviewService = require("@service/review.service");
+const otpService = require("@service/otp.service");
 
 
 router.use(Author.verifyToken);
@@ -110,6 +112,42 @@ router.get('/newpass',async (req,res) =>{
             res.json({statusCode: 200});
         }
 })
+
+router.get('/otp/:token',PhoneMiddle, async (req,res) => {
+    const user = await userService.getUserbyId(req.user.id);
+    if(user.phone_code != req.params.token){
+        res.redirect("/api/v1/user/profile");
+    }
+    else{
+        const otp = await otpService.getByphone(user.phone);
+        if(!otp){
+            const test = await user.SendOtp();
+            console.log(test);
+            res.render('send_otp');
+        }
+        else{
+            res.render('send_otp',{message:"OTP has been sent"});
+        }
+    }
+})
+        .post('/otp',async (req,res) => {
+            const {otp} = req.body;
+            const user = await userService.getUserbyId(req.user.id);
+            if(otpService.compareOtp(user.phone, otp)){
+                await userService.updateActivePhone(req.user.id);
+                await otpService.deleteByPhone(user.phone);
+                res.json({statusCode: 200});
+            }
+            else{
+                res.json({statusCode: 403}); ////// in ra lỗi nếu sai mã otp
+            }
+        })
+        .post("/otp/resend",async (req,res) => {
+            const user = await userService.getUserbyId(req.user.id);
+            const test = await user.SendOtp();
+            console.log(test);
+            res.json({statusCode: 200});
+        })
 
 //===========================Cart
 router.get('/cart',async (req,res) => {
@@ -203,7 +241,7 @@ router.get("/checkout", CheckoutMiddle.redirect_check ,async (req,res) => {
             return res.json({statusCode: 201});
         }
         
-        if(!user.isEmailActive){
+        if(!user.isEmailActive || !user.isPhoneActive){
             return res.json({statusCode: 202});
         }
 

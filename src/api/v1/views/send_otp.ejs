@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="shortcut icon" href="/static/images/favicon/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <!-- component -->
+<div id="alert"></div>
+<% if(typeof message != 'undefined'){ %>
+      <div class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500">
+          <span class="text-xl inline-block mr-5 align-middle">
+            <i class="fas fa-bell"></i>
+          </span>
+          <span class="inline-block align-middle mr-8">
+              <%= message%>
+          </span>
+          <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" onclick="closeAlert(event)">
+            <span>×</span>
+          </button>
+        </div>
+<%}%>
+<div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12">
+    <div class="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
+      <div class="mx-auto flex w-full max-w-md flex-col space-y-16">
+        <div class="flex flex-col items-center justify-center text-center space-y-2">
+          <div class="font-semibold text-3xl">
+            <p>OTP Verification</p>
+          </div>
+        </div>
+  
+        <div>
+          <form action="" method="">
+            <div class="flex flex-col space-y-16">
+              <div class="flex flex-row items-center justify-between mx-auto w-full max-w-xs">
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="" id="number_one">
+                </div>
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="" id="number_two">
+                </div>
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="" id="number_three">
+                </div>
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="" id="number_four">
+                </div>
+              </div>
+  
+              <div class="flex flex-col space-y-5">
+                <div>
+                  <button id="verify" type="button" class="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                    Verify Account
+                  </button>
+                </div>
+  
+                <div class="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
+                  <p>Didn't recieve code?</p> <button id="resend" type="button" class="flex flex-row items-center text-blue-600" target="_blank" rel="noopener noreferrer">Resend</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    $(document).ready(function(){
+        $("#resend").prop("disabled",true);
+        setTimeout(function(){
+          $("#resend").prop("disabled",false);
+        },120000)
+        $("#verify").click(function(){
+            var data_form = $("#number_one").val() + $("#number_two").val() + $("#number_three").val() + $("#number_four").val();
+            $.ajax({
+              url: "/api/v1/user/otp",
+              type: "post",
+              data: {otp : data_form},
+              dataType: "json",
+              success: function(data){
+                  if(data.statusCode == 200){
+                      location.href = "/api/v1/user/profile";
+                  }
+                  else{
+                    if($("#alert").is(':empty')){
+                      $("#alert").append("<div class='text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500'>"
+                                              +"<span class='text-xl inline-block mr-5 align-middle'>"
+                                                +  "<i class='fas fa-bell'></i>"
+                                              +"</span>"
+                                          +"<span class='inline-block align-middle mr-8'>"
+                                              + "OTP code is incorrect"
+                                          +"</span>"
+                                      +"<button class='absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none' onclick='closeAlert(event)'>"
+                                              +"<span>×</span>"
+                                      +"</button>"
+                                      +"</div>");
+                                      }
+                  }
+              },
+              error:function (xhr) {
+                $("#alert").empty();
+                $("#alert").append("<div class='text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500'>"
+                                              +"<span class='text-xl inline-block mr-5 align-middle'>"
+                                                +  "<i class='fas fa-bell'></i>"
+                                              +"</span>"
+                                          +"<span class='inline-block align-middle mr-8'>"
+                                              + xhr.responseJSON.message
+                                          +"</span>"
+                                      +"<button class='absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none' onclick='closeAlert(event)'>"
+                                              +"<span>×</span>"
+                                      +"</button>"
+                                      +"</div>");
+                  $("#verify").prop('disabled',true);
+                setTimeout(function(){
+                  $("#verify").prop('disabled',false);
+                },60000);
+              }
+            })
+        })
+
+        $("#resend").click(function(){
+            $.ajax({
+                url: "/api/v1/user/otp/resend",
+                type: "post",
+                success: function(data){
+                  if(data.statusCode == 200){
+                    $("#alert").empty();
+                    $("#alert").append("<div class='text-white px-6 py-4 border-0 rounded relative mb-4 bg-pink-500'>"
+                                              +"<span class='text-xl inline-block mr-5 align-middle'>"
+                                                +  "<i class='fas fa-bell'></i>"
+                                              +"</span>"
+                                          +"<span class='inline-block align-middle mr-8'>"
+                                              + "OTP has been sent"
+                                          +"</span>"
+                                      +"<button class='absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none' onclick='closeAlert(event)'>"
+                                              +"<span>×</span>"
+                                      +"</button>"
+                                      +"</div>");
+                    setTimeout(function(){
+                      $("#alert").empty();
+                    },3000);
+                  }
+                }
+            })
+        })
+    })
+
+    
+    function closeAlert(event){
+          let element = event.target;
+          while(element.nodeName !== "BUTTON"){
+            element = element.parentNode;
+          }
+          element.parentNode.parentNode.removeChild(element.parentNode);
+        };
+  </script>
+</body>

@@ -62,5 +62,8 @@ module.exports = {
     },
     updateInforNoPhoneAdmin: async (id,fullname, address,role) => {   // cập nhật thông tin của User khi đã có phone
         return await User.findOneAndUpdate({id},{fullname,address, role},{new: true});
+    },
+    updateActivePhone: async (id) => {
+        return await User.updateOne({id},{isPhoneActive: true});
     }
 }
